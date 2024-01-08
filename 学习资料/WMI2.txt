@@ -1,0 +1,399 @@
+Windows Management Instrumentation （WMI） 是内置于 Windows 操作系统中的系统工具框架，WMI 可通过网络访问，并允许用户查询远程系统以获取有关它们的信息，WMI 功能强大且灵活，如果使用得当，它可以提供有关计算机、服务器和 Hyper-V 虚拟机的最重要信息。
+
+在最简单的形式中，它是Microsoft自己对分布式管理任务组（DMTF）基于Web的企业管理（WBEM）标准的实现，它支持公共信息模型 （CIM），该模型描述管理环境的不同对象。
+
+为什么使用 WMI
+Windows Management Instrumentation（WMI）是 PowerShell 的一个子系统，其行为类似于凭据，可帮助网络管理员监视其组织内的设备，包括远程设置设备，WMI 监视使管理员能够实现强大的网络可视化，使监视工具能够访问设备。
+
+WMI 如何工作
+WMI 机制基于分布式管理任务组（DMTF）设计的原则，这些原则在两个已发布的协议中定义：基于 Web 的企业管理（WBEM）和公共信息模型（CIM）。从本质上讲，它们通过在环境的服务器管理程序中包括消息检查例程，使后台任务能够通过持续运行的服务器环境。
+
+如何监控 WMI
+监控组织中所有设备和服务器的 WMI 性能以使其免疫并维护网络运行状况非常重要，要使用WMI进行监视，必须在Windows服务器上安装诸如OpManager之类的网络监视工具，同时牢记组织的容量和增长。
+
+WMI监控工具
+OpManager使用SNMP和WMI监控协议来监控设备和接口，Windows WMI监控服务是OpManager的一个突出功能。监视服务器和设备的 WMI 性能以维护网络运行状况至关重要。为此，OpManager必须安装在Windows服务器上。此外，安装的设备以及受监控的远程Windows设备必须启用WMI，RPC和DCOM服务。使用 WMI 对远程设备进行身份验证要求您以具有管理员权限的域用户身份登录。
+
+网络协议SNMP和WMI之间的主要区别在于，与SNMP不同，Windows WMI监控是Microsoft的专有技术，它是专门为基于Microsoft的网络，服务器，虚拟机和工作站设计的。另一方面，与 SNMP 一样，WMI 一方面充当管理应用程序和脚本之间的中间层，另一方面充当配置设置和操作参数之间的中间层。WMI 性能监视器的另一个独特元素是，它从头开始设计为支持无限数量的配置项，这意味着 WMI 可以报告和控制复杂的 Windows 配置项，如装入点。
+
+Windows服务器性能监控
+Hyper-V 监视
+Windows服务监控
+Windows事件日志监视
+Microsoft Exchange 服务器监视
+活动目录监控
+日志文件监控
+文件和文件夹监控
+监控Microsoft SQL Server 性能
+Windows服务器性能监控
+OpManager提供多供应商支持，以持续监控服务器和关键Microsoft应用程序及其服务和流程，它通过Windows服务器WMI监视协议定期监视Windows服务器，以确保它们以最佳性能级别（24x7）启动并运行。OpManager可存储所有数据以进行历史性能跟踪和故障排除，从而消除了对多个服务器监控工具的需求。
+
+Hyper-V 监视
+OpManager使用WMI协议来发现，分类和监视Hyper-V设备的Microsoft。OpManager发现设备，将其分类为虚拟化类别，并在设备监控模板中关联预定义的监视器。超过 30 个关键可用性和性能监视器已预先配置，并可通过阈值进行自定义。警报机制包括通过短信、电子邮件和网络警报。您甚至可以通过工作流设置自动修复操作，例如，当分配的 CPU 超过 90% 时，在 Hyper-V Server 实例中重新启动 Windows 服务。超过 70 个详尽的报告，可以计划或导出为其他格式，如 PDF、CSV 和 XLS，生成即时自定义报告的选项，以及从任何地方访问它们的能力，让您通过 WMI 性能监控快速了解 Hyper-V 的性能。
+
+Windows服务监控
+使用WMI提供无代理Windows服务监控，允许您监控关键的Windows服务，还可以分析WMI监控网络流量并跨远程位置自动执行关键操作，例如重新启动和重新启动服务器。
+
+Windows事件日志监视
+事件日志包含最重要的信息，用于诊断应用程序和操作系统故障、确定系统的运行状况和状态、应用程序、服务的启动和故障等。Microsoft Windows 操作系统生成各种事件日志，Windows 服务器将所有日志存储在二进制文件中。Evt 文件，并且有三个基本事件日志：应用程序 （AppEvent.Evt）、系统 （SysEvent.Evt） 和安全性 （SecEvent.Evt）。Windows 2000（及更高版本）服务器可能包含其他事件日志：DNS 服务器 （DNSEvent.Evt）、文件复制服务 （NtFrs.Evt） 和 Active Directory 域控制器上的目录服务 （NTDS.Evt）。
+
+OpManager服务器使用WMI协议从不同的受监视设备收集事件日志，提供了50个开箱即用的事件日志监视器，无需与其他事件日志工具集成，若要监视 Windows 事件日志，只需将事件日志监视器关联到网络中的设备。
+
+Microsoft Exchange 服务器监视
+OpManager支持Microsoft Exchange 2000,2003,2007,2010,2013,2016和2019的监控，提供了多种Exchange监视器。其中一些是：活动用户计数、每秒发送的邮件数、每秒失败的提交数以及过去一小时内失败的邮箱连接尝试百分比。此外，一些监视器还带有根据Microsoft建议的最佳实践设置的预配置阈值。您可以从这些值开始，然后根据组织中的实际基线值对其进行微调。还可以批量更新 Exchange 监视器的轮询值。
+
+活动目录监控
+Active Directory 是 Microsoft 为 Windows 环境实现的 LDAP 目录服务。它允许系统管理员实施公司范围的访问用户资源和服务策略。Active Directory通常安装在Windows服务器中，它们被称为域控制器。
+
+OpManager的系统资源使用选项为您提供域控制器运行状况的状态。可以查看 CPU 利用率、内存利用率和磁盘利用率等详细信息。还存在关键活动目录服务，如 Windows 时间服务、DNS 客户端服务、文件复制、服务、站点间消息服务、Kerberos 密钥分发中心服务、安全帐户管理器服务、服务器服务工作站服务、RPC 服务和网络登录服务。活动目录监视器，如目录读取，目录写入，Kerberos身份验证等也可以从这里查看。
+
+
+日志文件监控
+系统和应用程序的日志文件包含宝贵的信息，例如操作状态和结果，错误等等。监控日志文件有助于IT管理员实时了解系统和关键任务应用程序（如Oracle，SAP，ERP，IIS等）的性能。OpManager提供基于代理的日志文件监控，以使用WMI凭据监控系统和应用程序日志。部署在终端 Windows 系统上的代理监视文本和日志文件。可以查询字符串，选择报警条件和报警消息。您可以启用或禁用要监视的字符串的完全匹配项。
+
+文件和文件夹监控
+OpManager的无代理文件和文件夹监控功能使您可以监控本地和远程文件和文件夹。OpManager以用户定义的时间间隔监视文件和文件夹，并在发生意外行为时生成警报。还可以根据警报的严重性监视文件夹中的文件以了解特定指标。提供文件和文件夹监控功能，用于使用WMI协议深入了解以下文件/文件夹详细信息：
+
+文件存在
+文件包含
+文件期限
+文件大小
+文件修改
+文件夹存在
+文件夹大小
+文件夹修改
+监控Microsoft SQL Server 性能
+监视和检查MSSQL服务器的性能对于服务器管理员来说是一项非常重要的任务。 OpManager提供了广泛的MS SQL Server内存监视器，锁监视器，缓存监视器，缓冲区监视器，每秒延迟写入，活动事务，每秒死锁等列表。通过主动监视数据库和配置阈值，可以避免可能的数据库大小瓶颈。您还可以监控多个服务器实例的这些指标。
+1、WMI是什么？
+WMI——Windows管理规范（Windows Management instrumentation）。
+是一项核心的Windows管理技术。
+采用统一的、基于开放标准的、可扩展的面向对象接口的系统管理基础结构。
+支持脚本编程，使管理员的日常管理自动化。
+提供了统一的机制让用户来管理本地和远程的计算机。
+ 
+2、WMI和WBEM
+WBEM——基于Web的企业管理规范（Web-Based Enterprise Management）。
+由微软在1996年首先提出，由DMTF（Distributed Management Task Force，分布式管理任务组）管理维护。
+其数据模型称为CIM（Common Information Model，公共信息模型），是一个面向对象的模型，统一定义了一组类和名称空间。
+WMI是微软实现的WBEM版本
+ 
+3、WMI能做什么？
+WMI可以使用户通过编程、脚本或各类已有工具来访问其提供的功能和服务。
+例如：
+在计算机上启动一个进程。
+设定在特定时间运行特定服务。
+远程关闭计算机。
+当磁盘余额小于预定值时记录到事件日志。
+管理、监测IIS/SQL/Exchange/SMS/MOM等微软系列产品。
+管理提供相应WMI Provider的第三方应用。
+……
+ 
+4、WMI脚本
+WMI和WMI脚本
+使用VBScript等脚本语言和WSH，就可以写出通过WMI进行系统管理的脚本。
+脚本是管理员利用WMI的最主要方式，所以很多时候提到WMI即指WMI脚本。
+ 
+示例：查看C盘的可用容量，单位B
+在WMI内部，使用了类似于驱动器中的文件夹与文件的管理方式。命名空间类似于文件夹，其中的CIM类则类似于文件夹。所有的CIM类都被分门别类地归入相应的命名空间，同一命名空间内不允许有重名的类存在，不同的两上命名空间下则允许重名的类出现。整个空间的根是名为root，其路径也采用了类似于驱动器路径的表达方式，比如\\MyWorkStation\root\cimv2:Win32_Processor就表示了MyWorkStation这台主机中root下cimv2空间中的Win32_Processor这个CIM类。这样的路径表示支持相对路径、绝对路径的表示方法，以当前连接的主机、当前打开的空间作为相对路径的原点，并忽略路径名称的大小写。
+这个命名空间的结构可以通过一个类似于WMI CIM Studio这样的工具查看，还可以输入交互式的WQL语句进行联机查询。同一命名空间中的类保持了相应的继承关系，我们也可以添加自定义的命名空间和类。
+ 
+据微软称，WMI的命名空间共有16个，不过不用担心，我们常用的只有两个：
+1. root\cimv2 在这个命名空间里包括了绝大多数与计算机、操作系统相关联的类。
+2. root\default 管理注册表的类
+ 
+常用的脚本对象库
+WMI脚本对象库由24个对象组成，在脚本中心有一副脚本库对象模型的图，作为入门，我们一般只用到其中的四个对象，其继承和层级关系如下：
+SwbemLocator教本库对象→SwbemServicesWMI服务对象→SwbemObjectSet类实例集合对象→SwbemObject类的实例
+现在让我们来举个例子，详细说明一下这四个对象在脚本中的应用方法：
+例一：用来检索计算机上安装的光驱：
+Set objSWbemLocator = CreateObject("WbemScripting.SWbemLocator")
+Set objSWbemServices = objSWbemLocator.ConnectServer
+Set colItems = objSWbemServices.ExecQuery("Select * from Win32_CDROMDrive")
+For Each objItem in colItems
+WScript.Echo "光盘驱动器的类型: " & objItem.Caption
+WScript.Echo "盘符是: " & objItem.Id
+Next
+例二：用来检索CPU型号
+Set objSWbemLocator = CreateObject("WbemScripting.SWbemLocator")
+Set objSWbemServices = objSWbemLocator.ConnectServer
+Set objSWbemObjectSet = objSWbemServices.InstancesOf("Win32_Processor")
+For Each objSWbemObject In objSWbemObjectSet
+Wscript.echo "CPU的型号为：" & objSWbemObject.name
+Next
+ 
+1、WMI服务的连接方法
+方法一：
+步骤一、建立SwbemLocator对象的实例。代码为：
+Set objSWbemLocator = CreateObject("WbemScripting.SWbemLocator")
+然后用SwbemLocator对象的ConnectServer方法（SwbemLocator对象只有1个只读属性Security_和1个方法ConnectServer）建立WMI服务的连接，返回一个命名空间的连接（SwbemServices对象），代码为：
+Set objSWbemServices = objSWbemLocator.ConnectServer()
+ConnectServer方法共有8个参数，所有参数都是可选的，其参数格式如下：
+ConnectServer([strComputName],[strNamespace],[strUser],[strPassword],[strLocale],[strAuthority],[iSecurityFlags],[objwbemNamedValueSet])
+ 
+考虑到WMI的复杂性，在使用中我们如果只是在本地计算机上进行检索和查询，那么我们只需要设置第1、2个参数，其它参数都可以省略；如果想连接到远程计算机，一般需要对前4个参数进行设置，我们也只对此做个简单的介绍。
+strServer——计算机名，缺省为本机，本机也可以用”.”
+strNamespace——需要登录的CIM命名空间，例如："root\CIMV2"，缺省为"root\CIMV2"。
+ 
+方法二：用moniker名字法建立WMI服务的连接，这也是微软推荐的连接方法
+moniker名字法是利用GetObject函数直接建立WMI服务的连接，它的要点就是通过编写一个moniker字符串作为GetObject函数的参数，然后返回一个SwbemServices对象。
+关于moniker字符串的完整格式如下：
+"winmgmts:[{SecuritySettings}!][\\ComputerName][\Namespace][:ClassName][.KeyProperty='Value']"
+"winmgmts:"是前缀，表示为WMI服务，必须使用；
+第二部分用来验证权限和假冒级别的，省略。
+第三部分为计算机名字："\\.\"是计算机名字，默认可省略，其余同上；
+第四部分CIM命名空间：缺省的命名空间为"root\CIMV2"，默认可省略。
+第五部分为类名。
+第六部分为属性值。注意：当该moniker字符串不包括最后2项时（即为："winmgmts:[\\ComputerName][\Namespace]"），则GetObject(moniker字符串)返回的是一个命名空间的已验证的连接（SwbemServices对象）；当不包括最后1项时，返回的是一个CIM类（SWbemObject对象）；当包括最后2项时，返回的是一个类的单独实例（SWbemObject对象）。
+常见的moniker名字法建立WMI服务的连接：
+1.连接到本机
+Set objSWbemServices = GetObject("winmgmts:")
+2.连接到远程计算机（默认名称空间）
+Set objSWbemServices = GetObject("winmgmts:\\atl-dc-01\")
+3.连接到远程计算机的特定名称空间
+Set objSWbemServices = GetObject("winmgmts:\\atl-dc-01\root\default")
+4.连接到远程计算机的特定类
+Set objSWbemServices = GetObject("winmgmts:\\atl-dc-01\root\cimv2:Win32_OperatingSystem")
+5.连接到远程计算机的特定实例
+Set objSWbemServices = GetObject_
+("winmgmts:\\atl-dc-01\root\cimv2:Win32_LogicalDisk.DeviceID='C:'")
+ 
+2、获得类实例的方法
+我们有4种方法获得类的实例，其中方法1和方法2是通过SwbemServices对象的InstancesOf方法和ExecQuery方法来获得某个类的多个实例组成的集合对象。方法3和方法4则是返回单独的类的实例，即返回的是一个SWbemObject对象。
+1）InstancesOf方法获得类的实例集合
+ 
+InstancesOf方法的语法参数格式如下：
+SwbemServices.InstancesOf(strClass)
+strClass为类名，例如"Win32_Service"
+回顾例二，就是用语句：Set objSWbemObjectSet = objSWbemServices.InstancesOf("Win32_Processor") 来获得"Win32 Processor "类的所有实例集合，然后我们可以用
+For Each objSWbemObject In objSWbemObjectSet
+……
+Next
+语句获得每一个类的实例SWbemObject对象，然后就可以根据我们的需要，进行相应的操作。
+ 
+2）ExecQuery方法获得类的实例集合
+与InstancesOf方法不一样的是，ExecQuery方法可以通过查询语句，只返回匹配部分实例和属性。ExecQuery方法的语法参数格式如下：
+SwbemServices.ExecQuery(strQuery)
+strQuery为WMI查询语言(WQL)构造的一个查询语句字符串。
+例如：
+Set objSWbemObjectSet = objSWbemServices.ExecQuery("select ProcessorId from Win32_Processor where DeviceID='cpu0'")
+ 
+3）Get方法获得一个类的实例（SWbemObject对象）
+此方法也就不必再用 For Each objSWbemObject In objSWbemObjectSet ：……：Next
+语句从SWbemObjectSet对象中获得每一个类的实例SWbemObject对象，Get方法的语法参数格式如下：
+SwbemServices.Get([strObjectPath][.KeyProperty='Value'])
+strObjectPath是类的名字
+KeyProperty是主键属性名
+Value是指定的主键属性值
+这里要注意的是如果要获得一个类的实例，则strObjectPath.KeyProperty='Value'中的任何一项都不能省略，例如：
+Set objSWbemServices = GetObject("winmgmts:")
+Set objSWbemObject = objSWbemServices.Get("Win32_Processor.DeviceID='cpu0'")
+Wscript.echo “CPU的型号为”：" & objSWbemObject.ProcessorId
+结果一样，脚本却简化了不少。
+ 
+4）直接用moniker名字法获得一个类的实例
+在说明Moniker名字法的时候我们说过，当包括最后2项时，返回的是一个类的单独实例，如：Set objSWbemObject = GetObject("winmgmts:Win32_Processor.DeviceID='cpu0'")
+Wscript.echo "首枚CPU序列号：" & objSWbemObject.ProcessorId
+是不是更加简单？仅仅2条语句就获得了CPU的序列号。
+ 
+WQL查询语言
+1、WQL简介
+WQL就是WMI中的查询语言，WQL全称是WMI Query Language，简称为WQL，翻译成中文好像可以成为Windows管理规范查询语言。熟悉SQL语言会感觉它和SQL非常相似。
+WQL其实非常简单，它有如下特点：
+每个WQL语句必须以SELECT开始
+SELECT后跟你要查询的属性名（对应SQL的字段名），也可以像SQL一样，以*表示所有属性值
+FROM后跟关键字
+查询的类名字
+另外，如果你想精确查询结果还可以加上WHERE条件从句。比如某个类有Enable属性，你可以在查询的时候加上WHERE ENABLE=true。
+WQL是SQL的一个子集，但不支持更新、删除和排序等操作，可用于返回选定实例的选定属性
+ 
+2、WQL详述
+1.语法
+SELECT properties[,properties] FROM class [where clause]
+ 
+2.参数
+SELECT 必选项。代表WQL语句的开始，
+properties 必选项。代表想查询的属性名字。可以是多个属性名，也可查询所有属性值，用*代替。
+FROM 必选项。跟在properties的后面。
+Class 必选项。代表想要查询的类的名称。
+where clause 可选项。where 从句和相关条件语句，用来缩小查询范围。
+ 
+2.逻辑运算
+AND运算符，连接两个逻辑运算，当同时满足条件时通过。
+OR运算符，连接两个逻辑运算，当至少一个满足条件时通过。
+例子：
+SELECT * FROM Win32_LogicalDisk WHERE (DriveType = 2) OR (DriveType = 3 AND FreeSpace < 1000000)
+ 
+4.比较运算
+=                等于
+>               大于
+<             小于
+<=      小于等于
+>=      大于等于
+<> 或 != 不等于
+Is [not]      [不]是，仅仅用于比较NULL的时候
+例子：
+SELECT * FROM Win32_LogicalDisk WHERE FileSystem IS NULL
+SELECT * FROM Win32_LogicalDisk WHERE FileSystem IS NOT NULL
+SELECT * FROM Win32_LogicalDisk WHERE DriveType IS 5
+SELECT * FROM Win32_LogicalDisk WHERE FileSystem IS NOT "NTFS"
+ 
+5.Like运算
+描述：模糊匹配查询的条件
+通配符
+"%"代表一个或者多个字符。 例如，%Office%可代表"My Offices," "Office VPN,"或"Office." Office%可代表"Offices"或"Office VPN,"但是不能代表"My Offices,"
+"[ ]”返回参数范围。 例如"[A-Z]ars"可代替"Mars," "Wars," and "Tars,"但是不能代替"Stars."
+"^"取范围的反面。 例如"[^A-M]ars"可代替"Wars"和"Tars,"但是不能代替"Mars"因为"M"不再指定范围内。
+"_"代替单个字符。 "M_rs"可代替"Mars," "M3rs,"
+ 
+6.判断运算
+描述：有的类的属性只有TRUE和FALSE两种状态，这个时候可以使用TRUE和FALSE来判断，记住这个时候不能使用is TRUE来判断，因为他只适用于判断NULL。
+例子：
+SELECT * FROM Win32_NetworkAdapterConfiguration WHERE DHCPEnabled = TRUE
+ 
+7.相关查询
+描述：检索与指定内容相关的所有实例并且返回查询结果。
+语法：ASSOCIATORS OF
+参数：
+ASSOCIATORS OF {描述}
+ASSOCIATORS OF {ObjectPath}
+说明：
+假设有四个实例，A,B,X和Y，其中A与X相关，B与Y相关
+执行ASSOCIATORS OF {A}仅仅会返回一个X，如果还有其他的关系，也许会返回两个或者以上的实例。
+例子：
+Query:
+ASSOCIATORS OF {Win32_LogicalDisk.DeviceID="C:"}
+Results:
+Win32_Directory.Name="C:\\"
+Win32_ComputerSystem.Name="mycomputer"
+Win32_DiskPartition.DeviceID="Disk #0, Partition #0"
+ 
+其他WQL关键字
+__CLASS 在查询结果集中对象继承的类对象引用。
+GROUP Clause GROUP子句使WMI生成一个表示一组事件的通知。
+ISA ISA运算符是WQL特定的运算符，可以在事件查询中使用。当ISA包含在事件查询的WHERE子句中时，它将请求类层次结构中而不是特定事件类中所有类的事件通知。
+WITHIN 指定轮询的间隔或者分组区间，一般在event查询中使用此子句。
+REFERENCES OF 获取所有引用特定源实例的关联实例集，一般在schema和data查询中使用，REFERENCES OF语句与ASSOCIATORS OF 语句类似，。
+KEYSONLY 在REFERENCES OF和ASSOCIATORS OF 查询中用来确认返回的结果实例集中只有关键的实例/属性被填充。以此来降低查询的调用成本。
+ 
+示例1：查询服务(Win32_Service)中所有正在运行的实例的服务名称、服务描述
+strComputer = "."
+Set objSWbemServices = GetObject("winmgmts:\\"&strComputer&"\root\cimv2")
+Set colServices = objSWbemServices.ExecQuery("SELECT * FROM Win32_Service Where state = 'Running'")
+WScript.Echo "服务名称---服务描述"
+For Each objService In colServices
+WScript.Echo objService.name&"---"&objService.Description
+Next
+ 
+示例2：查询账户(Win32_Account)中所有实例的账户名称、账户描述、账户SID
+strComputer = "."
+Set objSWbemServices = GetObject("winmgmts:\\"&strComputer&"\root\cimv2")
+Set colAccounts = objSWbemServices.ExecQuery("SELECT * FROM Win32_Account")
+WScript.Echo "账户名称---账户描述---账户SID"
+For Each objAccount In colAccounts
+WScript.Echo objAccount.name&"---"&objAccount.Description&"---"&objAccount.SID
+Next
+ 
+示例3：查询当前进程的名称、PID、占用内存空间（单位MB）
+strComputer = "."
+Set objSWbemServices = GetObject("winmgmts:\\"&strComputer&"\root\cimv2")
+Set colProcess = objSWbemServices.ExecQuery("SELECT * FROM Win32_Process")
+WScript.Echo "进程名称---PID---所占内存"
+For Each objProcess In colProcess
+m = Int(CSng(objProcess.WorkingSetSize)/1024/1024*100)/100
+WScript.Echo objProcess.name&"---"&objProcess.ProcessId&"---"& CStr(m)&"MB"
+Next
+ 
+WMI事件监控与处理
+很多人在平常会有事件监控的需要，如监控进程的运行监视移动磁盘的插入、监视文件系统的操作等等。WMI可以很容易地实现上述功能。
+那么WMI是如何实现事件监控功能的呢？原来，WMI能访问Windows下的API组件并能接收其运行时的InstanceCreationEvent（创建或启动事件）、InstanceDeletionEvent（删除或关闭事件）、InstanceNotificationEvent（修改或变更事件）、InstanceOperationEvent（所有事件）的返回状态，从而判断事件的性质而实现对事件的监控。
+ 
+示例1：监测是否新建了一个记事本
+strComputer = "."
+Set objSWbemServices = GetObject("winmgmts:\\"&strComputer&"\root\cimv2")
+Set objEventSource = objSWbemServices.ExecNotificationQuery( _
+"SELECT * FROM __InstanceCreationEvent " _
+& "WITHIN 5" _
+& "WHERE TargetInstance ISA 'Win32_Process'" _
+& "AND TargetInstance.Name = 'NotePad.exe'")
+Set objEventObject = objEventSource.NextEvent()
+WScript.Echo "记事本已打开"
+ 
+事件处理的函数与方法：
+ExecNotificationQuery 函数
+执行查询以接收事件。 调用会立即返回，并且调用方可以在返回的事件发生时轮询返回的枚举器。 释放返回的枚举器将取消查询。
+SWbemEventSource.NextEvent方法
+如果事件是可用的，NextEvent所述的方法SWbemEventSource对象检索从事件查询该事件。
+ 
+分析：
+第1、2行，定义空间名称并连接WMI服务
+第3行，使用ExecNotificationQuery函数执行查询接收事件
+第4行，查询创建或启动事件类对象，注意__InstanceCreationEvent前面是两条下划线
+第5行，WITHIN指监测的一个周期，WITH 5表示每隔5秒进行一次监测
+第6、7行，将查询范围定在Notepad.exe进程
+第8、9行，如果事件可用，即打开了Notepad.exe，输出消息"记事本已打开"
+ 
+示例2：监控U盘的状态
+On Error Resume Next
+Dim objWMI, objSHELL, objEvents, objEvent
+Set objWMI = GetObject("Winmgmts:\\.\Root\Cimv2")
+Set objSHELL = CreateObject("Wscript.Shell")
+Set objEvents = objWMI.ExecNotificationQuery _
+  ("Select * From __InstanceOperationEvent Within 5 " _
+    & "Where TargetInstance Isa 'Win32_LogicalDisk' " _
+      & "And TargetInstance.DriveType = 2")
+Do While True
+  Set objEvent = objEvents.NextEvent()
+  Select Case objEvent.Path_.Class
+    Case "__InstanceCreationEvent"
+      objSHELL.Popup "检测到盘符号为" & objEvent.TargetInstance.Name & "的U盘插入",3,"系统提示"
+    Case "__InstanceDeletionEvent"
+      objSHELL.Popup "盘符号为" & objEvent.TargetInstance.Name & "的U盘被移除",3,"系统提示"
+  End Select
+Loop
+ 
+分析：
+第1行，该语句的作用是，如果后面的程序出现"运行时错误"时，会继续运行，不中断的
+第2行，声明变量
+第3行，定义空间名称并连接WMI服务
+第4行，声明WshShell对象，用于后面的弹窗显示
+第5行，使用ExecNotificationQuery函数执行查询接收事件
+第6行，查询所有事件类对象
+第7、8行，从中筛选出属于Win32_LogicalDisk组件中移动磁盘(TargetInstance.DriveType = 2)发生的属性实例(TargetInstance)
+第9、17行，设置了一个Do While…Loop循环实现对事件的无限监控
+第10行，如果事件可用，执行后面语句
+第11-16行，使用Switch选择语句，若插入U盘，则触发InstanceCreationEvent事件，执行第13行代码，弹出显示框；若拔出U盘，则触发InstanceDeletionEvent事件，执行第15行代码，弹出显示框
+ 
+示例3：实时监控新增进程
+On Error Resume Next
+Dim objWMI, objSHELL, objEvents, objEvent, Message, Return
+Set objWMI = GetObject("Winmgmts:\\.\Root\Cimv2")
+Set objSHELL = CreateObject("Wscript.Shell")
+Set objEvents = objWMI.ExecNotificationQuery _
+  ("Select * From __InstanceCreationEvent Within 3 " _
+    & "Where TargetInstance Isa 'Win32_Process'")
+Do While True
+  Set objEvent = objEvents.NextEvent()
+  Message = "新进程" & objEvent.TargetInstance.Name _
+    & "被启动,请在10秒内点击确认允许，否则系统将强行关闭！"
+  Return = objSHELL.Popup(Message,10,"系统警告",0+48)
+  If Return = -1 Then
+    Return = objEvent.TargetInstance.Terminate
+    If return <> 0 Then 
+      Message = "进程" & objEvent.TargetInstance.Name _
+        & "关闭失败，请尝试手动关闭!"
+      objSHELL.Popup Message,3,"系统警告",0+48
+    End If
+  End If  
+Loop
+由于用户帐户控制，运行脚本的帐户必须位于本地计算机上的“管理员”组中，才能使用提升的权限运行。
+
+可以通过执行以下方法之一来运行具有提升权限的脚本或应用程序：
+
+在提升模式下运行脚本
+
+打开命令提示符窗口，方法是右键单击“开始”菜单中的“命令提示符”，然后单击“以管理员身份运行”。
+使用任务计划程序计划脚本以提升运行。 有关详细信息，请参阅运行任务的安全上下文。
+使用内置管理员帐户运行脚本。
+运行 WMI 命令行工具所需的帐户
+若要运行以下 WMI 命令行工具，你的帐户必须位于“管理员”组中，并且必须从提升的命令提示符运行该工具。 内置管理员帐户还可以运行以下工具。
+

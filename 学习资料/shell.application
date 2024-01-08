@@ -1,0 +1,857 @@
+
+1、创建 Shell 对象
+ var Shell = new ActiveXObject("Shell.Application");
+ 
+2、使用 Shell 属性及方法
+
+ Shell.Application
+ Shell.Parent
+
+ Shell.CascadeWindows()
+ Shell.TileHorizontally()
+ Shell.TileVertically()
+ Shell.ControlPanelItem(sDir) /* 比如：sysdm.cpl */
+ Shell.EjectPC()
+ Shell.Explore(vDir)
+ Shell.Open(vDir)
+ Shell.FileRun()
+ Shell.FindComputer()
+ Shell.FindFiles()
+ Shell.Help()
+ Shell.MinimizeAll()
+ Shell.UndoMinimizeALL()
+ Shell.RefreshMenu()
+ Shell.SetTime()
+ Shell.TrayProperties()
+ Shell.ShutdownWindows()
+ Shell.Suspend()
+ oWindows = Shell.Windows() /* 返回ShellWindows对象 */
+ fFolder = Shell.NameSpace(vDir) /* 返回所打开的vDir的Folder对象 */
+ oFolder = Shell.BrowseForFolder(Hwnd, sTitle, iOptions [, vRootFolder]) /* 选择文件夹对话框 */
+  /*示例：
+  function BrowseFolder()
+  {
+   var Message = "清选择文件夹";
+
+   var Shell  = new ActiveXObject( "Shell.Application" );
+   var Folder = Shell.BrowseForFolder(0,Message,0x0040,0x11);
+   if(Folder != null)
+   {
+    Folder = Folder.items(); // 返回 FolderItems 对象
+    Folder = Folder.item();  // 返回 Folderitem 对象
+    Folder = Folder.Path;  // 返回路径
+    if(Folder.charAt(varFolder.length-1) != "//"){
+     Folder = varFolder + "//";
+    }
+    return Folder;
+   }
+  }
+  */
+
+  /*示例：
+  var Folder = Shell.NameSpace("C://");  // 返回 Folder对象
+  */ 
+ 
+3、使用 Folder 对象
+ 
+ [ oApplication = ] Folder.Application   // Contains the Application object.
+ [ oParentFolder= ] Folder.ParentFolder   // Contains the parent Folder object.
+ [    oTitle    = ] Folder.Title    // Contains the title of the folder.
+
+ Folder.CopyHere(vItem [, vOptions])   // Copies an item or items to a folder.
+ Folder.MoveHere(vItem [, vOptions])   // Moves an item or items to this folder.
+  /*
+  vItem:  Required. Specifies the item or items to move. This can be a string that represents a file name, a FolderItem object, or a FolderItems object.
+    vOptions Optional. Specifies options for the move operation. This value can be zero or a combination of the following values. These values are based upon flags defined for use with the fFlags member of the C++ SHFILEOPSTRUCT structure. These flags are not defined as such for Microsoft? Visual Basic?, Visual Basic Scripting Edition (VBScript), or Microsoft JScript?, so you must define them yourself or use their numeric equivalents.
+   4  Do not display a progress dialog box. 
+   8  Give the file being operated on a new name in a move, copy, or rename operation if a file with the target name already exists. 
+   16  Respond with "Yes to All" for any dialog box that is displayed. 
+   64  Preserve undo information, if possible.
+   128 Perform the operation on files only if a wildcard file name (*.*) is specified. 
+   256  Display a progress dialog box but do not show the file names. 
+   512  Do not confirm the creation of a new directory if the operation requires one to be created. 
+   1024 Do not display a user interface if an error occurs. 
+   2048  Version 4.71. Do not copy the security attributes of the file.
+   4096  Only operate in the local directory. Don't operate recursively into subdirectories.
+   9182 Version 5.0. Do not move connected files as a group. Only move the specified files. 
+  */
+ 
+
+ Folder.NewFolder(bName)     // Creates a new folder.
+ ppid = Folder.ParseName(bName)    // Creates and returns a FolderItem object that represents a specified item.
+  /*
+  bName:  Required. A string that specifies the name of the item.
+  */
+
+ oFolderItems = Folder.Items()    // Retrieves a FolderItems object that represents the collection of items in the folder.
+ sDetail = Folder.GetDetailsOf(vItem, iColumn)  // Retrieves details about an item in a folder. For example, its size, type, or the time of its last modification.
+  /*
+  vItem:  Required. Specifies the item for which to retrieve the information. This must be a FolderItem object.
+  iColumn: Required. An Integer value that specifies the information to be retrieved. The information available for an item depends on the folder in which it is displayed. This value corresponds to the zero-based column number that is displayed in a Shell view. For an item in the file system, this can be one of the following values:0 Retrieves the name of the item.
+   1  Retrieves the size of the item.
+   2  Retrieves the type of the item.
+   3  Retrieves the date and time that the item was last modified.
+   4  Retrieves the attributes of the item.
+   -1 Retrieves the info tip information for the item.
+  */
+ 
+4、使用 FolderItems 对象
+
+  /*示例：
+  var FolderItems = Shell.NameSpace("C://").Items(); // 返回 FolderItems 对象
+  */
+
+ [ oApplication = ] FolderItems.Application
+ [    iCount    = ] FolderItems.Count
+ [    oParent   = ] FolderItems.Parent
+
+ oFolderItem = FolderItems.Item([iIndex])  // 返回 FolderItem 对象
+
+5、使用 FolderItem 对象
+
+  /*示例：
+  var FolderItem = Shell.NameSpace("C://").Items().Item(iIndex); // 返回 FolderItems 对象
+  */
+
+ [ oApplication = ] FolderItem.Application
+ [    oParent   = ] FolderItem.Parent
+ [ sName = ] FolderItem.Name(sName) [ = sName ]
+ [ sPath = ] FolderItem.Path
+ [ iSize = ] FolderItem.Size
+ [ sType = ] FolderItem.Type
+ [ bIsLink = ] FolderItem.IsLink
+ [ bIsFolder = ] FolderItem.IsFolder
+ [ bIsFileSystem = ] FolderItem.IsFileSystem
+ [ bIsBrowsable = ] FolderItem.IsBrowsable
+ [  oGetLink  = ] FolderItem.GetLink   // 返回 ShellLinkObject 对象
+ [ oGetFolder = ] FolderItem.GetFolder   // 返回 Folder 对象
+ [ oModifyDate= ] FolderItem.ModifyDate(oModifyDate) [ = oModifyDate ] // Sets or retrieves the date and time that the item was last modified.
+
+ vVerb = FolderItem.Verbs()    // 返回 FolderItemVerbs 对象. This object is the collection of verbs that can be executed on the item.
+ FolderItem.InvokeVerb( [vVerb])    // Executes a verb on the item.
+
+
+6、使用 FolderItemVerbs 对象
+
+  /*示例：
+  var FolderItem = Shell.NameSpace("C://").Items().Item(iIndex).Verbs(); // 返回 FolderItems 对象
+  */
+ 
+ [ oApplication = ] FolderItemVerbs.Application
+ [ oParent = ] FolderItemVerbs.Parent
+ [ iCount = ] FolderItemVerbs.Count
+
+ oVerb = FolderItemVerbs.Item( [iIndex])   // 返回 FolderItemVerb 对象.
+
+7、使用 FolderItemVerb 对象
+
+  /*示例：
+  var FolderItem = Shell.NameSpace("C://").Items().Item(iIndex).Verbs().Item(iIndex); // 返回 FolderItems 对象
+  */
+
+ [ oApplication = ] FolderItemVerbs.Application
+ [ oParent = ] FolderItemVerbs.Parent
+ [ oName = ] FolderItemVerbs.Name
+ 
+ FolderItemVerb.DoIt()     // Executes a verb on the FolderItem associated with the verb.
+
+8、使用 ShellLinkObject 对象
+
+ [ sWorkingDirectory = ]ShellLinkObject.WorkingDirectory(sWorkingDirectory) [ = sWorkingDirectory ]
+ [ intShowCommand = ]ShellLinkObject.ShowCommand(intShowCommand) [ = intShowCommand ]
+  /*
+  intShowCommand  Integer that specifies or receives the link's show state. This can be one of the following values.
+    1  Activates and displays a window. If the window is minimized or maximized, the system restores it to its original size and position.
+    2  Activates the window and displays it as a minimized window.
+    3  Activates the window and displays it as a maximized window.
+   */
+ [ sArguments = ] ShellLinkObject.Arguments(sArguments) [ = sArguments ]
+ [ sDescription = ] ShellLinkObject.Description(sDescription) [ = sDescription ]
+ [ iHotkey = ] ShellLinkObject.Hotkey(iHotkey) [ = iHotkey ]
+  /*
+  iHotkey   Integer that specifies or receives the link's hot key code. The virtual key code is in the low-order byte, and the modifier flags are in the high-order byte. The modifier flags can be a combination of the following values.
+   1 SHIFT key
+   2 CTRL key
+   4 ALT key
+   8 Extended key
+   */
+ [ sPath = ] ShellLinkObject.Path(sPath) [ = sPath ]
+
+ iIcon = ShellLinkObject.GetIconLocation(sPath)
+ ShellLinkObject.Resolve(fFlags)
+  /*
+  fFlags   Required. Flags that specify the action to be taken. This can be a combination of the following values.
+   1  Do not display a dialog box if the link cannot be resolved. When this flag is set, the high-order word of fFlags specifies a time-out duration, in milliseconds. The method returns if the link cannot be resolved within the time-out duration. If the high-order word is set to zero, the time-out duration defaults to 3000 milliseconds (3 seconds).
+   4  If the link has changed, update its path and list of identifiers.
+   8  Do not update the link information.
+   16  Do not execute the search heuristics.
+   32 Do not use distributed link tracking.
+   64  Disable distributed link tracking. By default, distributed link tracking tracks removable media across multiple devices based on the volume name. It also uses the Universal Naming Convention (UNC) path to track remote file systems whose drive letter has changed. Setting this flag disables both types of tracking.
+   128  Call the Microsoft? Windows? Installer.
+   */
+ ShellLinkObject.Save( [sFile])
+ ShellLinkObject.SetIconLocation(sPath, iIndex)
+  /*
+  sPath   Required. String value that contains the fully qualified path of the file that contains the icon.
+  iIndex   Required. Integer that is set to the index of the icon in the file specified by sPath.
+  */
+
+9、使用 ShellWindows 对象
+ [ intCount = ] ShellWindows.Count
+
+ oShellWindows = ShellWindows._NewEnum()  // Creates and returns a new ShellWindows object that is a copy of this ShellWindows object.
+ oFolder = ShellWindows.Item( [iIndex])  // Retrieves an InternetExplorer object that represents the Shell window.
+
+ 
+
+10、说明
+ 通过第一步创建 Shell 对象，并进行相关函数调用，就可以返回以上各种对象，并进行相关操作。
+ 另外，在学习的过程中，发现了两个在msdn中提及却没相关的函数：
+  ShellApp.ShellExecute("cmd.exe");
+  ShellApp.NameSpace(vDir).Items().InvokeVerbEx(vVerb); /*vVerb:如delete*/
+
+ 还有些特殊的用法：
+                //var myprinterfolder = Shell.NameSpace("shell:PrintersFolder");
+                //var mydocsfolder = Shell.NameSpace("shell:personal");
+                //var mycompfolder = Shell.NameSpace("shell:drivefolder");
+
+             //Shell.ShellExecute( "wiaacmgr.exe","/SelectDevice" );
+  //Shell.ShellExecute( "rundll32.exe", "shell32.dll,Control_RunDLL sysdm.cpl,,1" )
+  //Shell.ShellExecute( "rundll32.exe", "shell32.dll,Control_RunDLL netcpl.cpl,,1" );
+  //Shell.ShellExecute( "rundll32.exe", "shell32.dll,Control_RunDLL sysdm.cpl,,1" );
+
+  The following command will run Rundll32.exe.
+  Rundll32.exe <dllname>,<entrypoint>,<optional arguments>
+
+  The following code sample shows how to use the command.
+  Rundll32.exe Setupx.dll,InstallHinfSection 132 C:/Windows/Inf/Shell.inf
+
+
+  //Shell.ShowBrowserBar("{C4EE31F3-4768-11D2-BE5C-00A0C9A83DA1}", true);
+
+ 真不知道，没有公开的函数调用还有多少，而msdn给我们的使用的只是九牛一毛而已!
+
+
+11、使用 Shell.UIHelper.1 对象
+
+        ShellUI = new ActiveXObject("Shell.UIHelper.1");
+
+ ShellUI.AddChannel(sURL)
+ ShellUI.AddFavorite(sURL [, vTitle])
+ bBool = ShellUI.IsSubscribed(sURL)  // Indicates whether or not a URL is subscribed to.
+ ShellUI.AddDesktopComponent(sURL, sType [, Left] [, Top] [, Width] [, Height])
+  /*
+  sURL   Required. A String value that specifies the URL of the new favorite item.
+  sType   Required. A String value that specifies the type of item being added. This can be one of the following values:
+    image   The component is an image.
+    website  The component is a web site.
+ 
+  Left   Optional. Specifies the position of the left edge of the component, in screen coordinates.
+  Top   Optional. Specifies the position of the top edge of the component, in screen coordinates.
+  Width   Optional. Specifies the width of the component, in screen units.
+  Height   Optional. Specifies the height of the component, in screen units.
+  */
+
+
+Rundll 32.exe User.exe,ExitWindows 
+
+ 
+
+ 
+
+ 
+
+出处：https://blog.csdn.net/koolfoo/article/details/16008
+
+官方参考：https://docs.microsoft.com/zh-cn/windows/win32/shell/objects
+
+====================================================================================
+
+常见问题
+1）常见FolderItem.Verbs使用方法
+
+复制代码
+'objFolder对象可以是文件夹、压缩包、文件等
+set objFolderItems = objFolder.Items
+            msgbox objFolderItems.Count            
+            
+            set it = objFolderItems.item(0)
+            msgbox it
+            set objVerbs = it.Verbs
+            msgbox objVerbs.count
+            msg=""
+            For i = 0 To objVerbs.count-1
+                msg = msg & objVerbs.Item(i)&"=="&i
+            Next
+            msgbox msg
+            'it.InvokeVerb("open")
+            it.InvokeVerbEx("delete")
+复制代码
+具体的其他用法，自己可以尝试
+
+2）使用  Folder.CopyHere(vItem [, vOptions]) 或者  Folder.MoveHere(vItem [, vOptions])  都是只能添加对象，如果想删除对象怎么办呢？
+
+虽然有 FolderItem.InvokeVerb 或者 FolderItem.InvokeVerbEx 方法，但是会有删除确认对话框，我暂时没有好的方法，在不提示的情况下直接删除文件。
+
+从网上参考：
+
+https://stackoverflow.com/questions/12388004/folderitem-invokeverbdelete-without-confirmation
+
+https://bbs.csdn.net/topics/394384419
+
+他们的做法是再次使用 MoveHere 方法，把不需要的文件或文件夹移除到其他地方。
+Jack_孟
+随笔 - 2908, 文章 - 0, 评论 - 722, 阅读 - 1844万
+VBS中如何使用Shell.Application对象
+关于Shell.Application的使用，实际上调用的是系统的shell32.dll文件里的方法。下面是一些常用的对象、属性、方法的介绍
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1、创建 Shell 对象
+ var Shell = new ActiveXObject("Shell.Application");
+ 
+2、使用 Shell 属性及方法
+
+ Shell.Application
+ Shell.Parent
+
+ Shell.CascadeWindows()
+ Shell.TileHorizontally()
+ Shell.TileVertically()
+ Shell.ControlPanelItem(sDir) /* 比如：sysdm.cpl */
+ Shell.EjectPC()
+ Shell.Explore(vDir)
+ Shell.Open(vDir)
+ Shell.FileRun()
+ Shell.FindComputer()
+ Shell.FindFiles()
+ Shell.Help()
+ Shell.MinimizeAll()
+ Shell.UndoMinimizeALL()
+ Shell.RefreshMenu()
+ Shell.SetTime()
+ Shell.TrayProperties()
+ Shell.ShutdownWindows()
+ Shell.Suspend()
+ oWindows = Shell.Windows() /* 返回ShellWindows对象 */
+ fFolder = Shell.NameSpace(vDir) /* 返回所打开的vDir的Folder对象 */
+ oFolder = Shell.BrowseForFolder(Hwnd, sTitle, iOptions [, vRootFolder]) /* 选择文件夹对话框 */
+  /*示例：
+  function BrowseFolder()
+  {
+   var Message = "清选择文件夹";
+
+   var Shell  = new ActiveXObject( "Shell.Application" );
+   var Folder = Shell.BrowseForFolder(0,Message,0x0040,0x11);
+   if(Folder != null)
+   {
+    Folder = Folder.items(); // 返回 FolderItems 对象
+    Folder = Folder.item();  // 返回 Folderitem 对象
+    Folder = Folder.Path;  // 返回路径
+    if(Folder.charAt(varFolder.length-1) != "//"){
+     Folder = varFolder + "//";
+    }
+    return Folder;
+   }
+  }
+  */
+
+  /*示例：
+  var Folder = Shell.NameSpace("C://");  // 返回 Folder对象
+  */ 
+ 
+3、使用 Folder 对象
+ 
+ [ oApplication = ] Folder.Application   // Contains the Application object.
+ [ oParentFolder= ] Folder.ParentFolder   // Contains the parent Folder object.
+ [    oTitle    = ] Folder.Title    // Contains the title of the folder.
+
+ Folder.CopyHere(vItem [, vOptions])   // Copies an item or items to a folder.
+ Folder.MoveHere(vItem [, vOptions])   // Moves an item or items to this folder.
+  /*
+  vItem:  Required. Specifies the item or items to move. This can be a string that represents a file name, a FolderItem object, or a FolderItems object.
+    vOptions Optional. Specifies options for the move operation. This value can be zero or a combination of the following values. These values are based upon flags defined for use with the fFlags member of the C++ SHFILEOPSTRUCT structure. These flags are not defined as such for Microsoft? Visual Basic?, Visual Basic Scripting Edition (VBScript), or Microsoft JScript?, so you must define them yourself or use their numeric equivalents.
+   4  Do not display a progress dialog box. 
+   8  Give the file being operated on a new name in a move, copy, or rename operation if a file with the target name already exists. 
+   16  Respond with "Yes to All" for any dialog box that is displayed. 
+   64  Preserve undo information, if possible.
+   128 Perform the operation on files only if a wildcard file name (*.*) is specified. 
+   256  Display a progress dialog box but do not show the file names. 
+   512  Do not confirm the creation of a new directory if the operation requires one to be created. 
+   1024 Do not display a user interface if an error occurs. 
+   2048  Version 4.71. Do not copy the security attributes of the file.
+   4096  Only operate in the local directory. Don't operate recursively into subdirectories.
+   9182 Version 5.0. Do not move connected files as a group. Only move the specified files. 
+  */
+ 
+
+ Folder.NewFolder(bName)     // Creates a new folder.
+ ppid = Folder.ParseName(bName)    // Creates and returns a FolderItem object that represents a specified item.
+  /*
+  bName:  Required. A string that specifies the name of the item.
+  */
+
+ oFolderItems = Folder.Items()    // Retrieves a FolderItems object that represents the collection of items in the folder.
+ sDetail = Folder.GetDetailsOf(vItem, iColumn)  // Retrieves details about an item in a folder. For example, its size, type, or the time of its last modification.
+  /*
+  vItem:  Required. Specifies the item for which to retrieve the information. This must be a FolderItem object.
+  iColumn: Required. An Integer value that specifies the information to be retrieved. The information available for an item depends on the folder in which it is displayed. This value corresponds to the zero-based column number that is displayed in a Shell view. For an item in the file system, this can be one of the following values:0 Retrieves the name of the item.
+   1  Retrieves the size of the item.
+   2  Retrieves the type of the item.
+   3  Retrieves the date and time that the item was last modified.
+   4  Retrieves the attributes of the item.
+   -1 Retrieves the info tip information for the item.
+  */
+ 
+4、使用 FolderItems 对象
+
+  /*示例：
+  var FolderItems = Shell.NameSpace("C://").Items(); // 返回 FolderItems 对象
+  */
+
+ [ oApplication = ] FolderItems.Application
+ [    iCount    = ] FolderItems.Count
+ [    oParent   = ] FolderItems.Parent
+
+ oFolderItem = FolderItems.Item([iIndex])  // 返回 FolderItem 对象
+
+5、使用 FolderItem 对象
+
+  /*示例：
+  var FolderItem = Shell.NameSpace("C://").Items().Item(iIndex); // 返回 FolderItems 对象
+  */
+
+ [ oApplication = ] FolderItem.Application
+ [    oParent   = ] FolderItem.Parent
+ [ sName = ] FolderItem.Name(sName) [ = sName ]
+ [ sPath = ] FolderItem.Path
+ [ iSize = ] FolderItem.Size
+ [ sType = ] FolderItem.Type
+ [ bIsLink = ] FolderItem.IsLink
+ [ bIsFolder = ] FolderItem.IsFolder
+ [ bIsFileSystem = ] FolderItem.IsFileSystem
+ [ bIsBrowsable = ] FolderItem.IsBrowsable
+ [  oGetLink  = ] FolderItem.GetLink   // 返回 ShellLinkObject 对象
+ [ oGetFolder = ] FolderItem.GetFolder   // 返回 Folder 对象
+ [ oModifyDate= ] FolderItem.ModifyDate(oModifyDate) [ = oModifyDate ] // Sets or retrieves the date and time that the item was last modified.
+
+ vVerb = FolderItem.Verbs()    // 返回 FolderItemVerbs 对象. This object is the collection of verbs that can be executed on the item.
+ FolderItem.InvokeVerb( [vVerb])    // Executes a verb on the item.
+
+
+6、使用 FolderItemVerbs 对象
+
+  /*示例：
+  var FolderItem = Shell.NameSpace("C://").Items().Item(iIndex).Verbs(); // 返回 FolderItems 对象
+  */
+ 
+ [ oApplication = ] FolderItemVerbs.Application
+ [ oParent = ] FolderItemVerbs.Parent
+ [ iCount = ] FolderItemVerbs.Count
+
+ oVerb = FolderItemVerbs.Item( [iIndex])   // 返回 FolderItemVerb 对象.
+
+7、使用 FolderItemVerb 对象
+
+  /*示例：
+  var FolderItem = Shell.NameSpace("C://").Items().Item(iIndex).Verbs().Item(iIndex); // 返回 FolderItems 对象
+  */
+
+ [ oApplication = ] FolderItemVerbs.Application
+ [ oParent = ] FolderItemVerbs.Parent
+ [ oName = ] FolderItemVerbs.Name
+ 
+ FolderItemVerb.DoIt()     // Executes a verb on the FolderItem associated with the verb.
+
+8、使用 ShellLinkObject 对象
+
+ [ sWorkingDirectory = ]ShellLinkObject.WorkingDirectory(sWorkingDirectory) [ = sWorkingDirectory ]
+ [ intShowCommand = ]ShellLinkObject.ShowCommand(intShowCommand) [ = intShowCommand ]
+  /*
+  intShowCommand  Integer that specifies or receives the link's show state. This can be one of the following values.
+    1  Activates and displays a window. If the window is minimized or maximized, the system restores it to its original size and position.
+    2  Activates the window and displays it as a minimized window.
+    3  Activates the window and displays it as a maximized window.
+   */
+ [ sArguments = ] ShellLinkObject.Arguments(sArguments) [ = sArguments ]
+ [ sDescription = ] ShellLinkObject.Description(sDescription) [ = sDescription ]
+ [ iHotkey = ] ShellLinkObject.Hotkey(iHotkey) [ = iHotkey ]
+  /*
+  iHotkey   Integer that specifies or receives the link's hot key code. The virtual key code is in the low-order byte, and the modifier flags are in the high-order byte. The modifier flags can be a combination of the following values.
+   1 SHIFT key
+   2 CTRL key
+   4 ALT key
+   8 Extended key
+   */
+ [ sPath = ] ShellLinkObject.Path(sPath) [ = sPath ]
+
+ iIcon = ShellLinkObject.GetIconLocation(sPath)
+ ShellLinkObject.Resolve(fFlags)
+  /*
+  fFlags   Required. Flags that specify the action to be taken. This can be a combination of the following values.
+   1  Do not display a dialog box if the link cannot be resolved. When this flag is set, the high-order word of fFlags specifies a time-out duration, in milliseconds. The method returns if the link cannot be resolved within the time-out duration. If the high-order word is set to zero, the time-out duration defaults to 3000 milliseconds (3 seconds).
+   4  If the link has changed, update its path and list of identifiers.
+   8  Do not update the link information.
+   16  Do not execute the search heuristics.
+   32 Do not use distributed link tracking.
+   64  Disable distributed link tracking. By default, distributed link tracking tracks removable media across multiple devices based on the volume name. It also uses the Universal Naming Convention (UNC) path to track remote file systems whose drive letter has changed. Setting this flag disables both types of tracking.
+   128  Call the Microsoft? Windows? Installer.
+   */
+ ShellLinkObject.Save( [sFile])
+ ShellLinkObject.SetIconLocation(sPath, iIndex)
+  /*
+  sPath   Required. String value that contains the fully qualified path of the file that contains the icon.
+  iIndex   Required. Integer that is set to the index of the icon in the file specified by sPath.
+  */
+
+9、使用 ShellWindows 对象
+ [ intCount = ] ShellWindows.Count
+
+ oShellWindows = ShellWindows._NewEnum()  // Creates and returns a new ShellWindows object that is a copy of this ShellWindows object.
+ oFolder = ShellWindows.Item( [iIndex])  // Retrieves an InternetExplorer object that represents the Shell window.
+
+ 
+
+10、说明
+ 通过第一步创建 Shell 对象，并进行相关函数调用，就可以返回以上各种对象，并进行相关操作。
+ 另外，在学习的过程中，发现了两个在msdn中提及却没相关的函数：
+  ShellApp.ShellExecute("cmd.exe");
+  ShellApp.NameSpace(vDir).Items().InvokeVerbEx(vVerb); /*vVerb:如delete*/
+
+ 还有些特殊的用法：
+                //var myprinterfolder = Shell.NameSpace("shell:PrintersFolder");
+                //var mydocsfolder = Shell.NameSpace("shell:personal");
+                //var mycompfolder = Shell.NameSpace("shell:drivefolder");
+
+             //Shell.ShellExecute( "wiaacmgr.exe","/SelectDevice" );
+  //Shell.ShellExecute( "rundll32.exe", "shell32.dll,Control_RunDLL sysdm.cpl,,1" )
+  //Shell.ShellExecute( "rundll32.exe", "shell32.dll,Control_RunDLL netcpl.cpl,,1" );
+  //Shell.ShellExecute( "rundll32.exe", "shell32.dll,Control_RunDLL sysdm.cpl,,1" );
+
+  The following command will run Rundll32.exe.
+  Rundll32.exe <dllname>,<entrypoint>,<optional arguments>
+
+  The following code sample shows how to use the command.
+  Rundll32.exe Setupx.dll,InstallHinfSection 132 C:/Windows/Inf/Shell.inf
+
+
+  //Shell.ShowBrowserBar("{C4EE31F3-4768-11D2-BE5C-00A0C9A83DA1}", true);
+
+ 真不知道，没有公开的函数调用还有多少，而msdn给我们的使用的只是九牛一毛而已!
+
+
+11、使用 Shell.UIHelper.1 对象
+
+        ShellUI = new ActiveXObject("Shell.UIHelper.1");
+
+ ShellUI.AddChannel(sURL)
+ ShellUI.AddFavorite(sURL [, vTitle])
+ bBool = ShellUI.IsSubscribed(sURL)  // Indicates whether or not a URL is subscribed to.
+ ShellUI.AddDesktopComponent(sURL, sType [, Left] [, Top] [, Width] [, Height])
+  /*
+  sURL   Required. A String value that specifies the URL of the new favorite item.
+  sType   Required. A String value that specifies the type of item being added. This can be one of the following values:
+    image   The component is an image.
+    website  The component is a web site.
+ 
+  Left   Optional. Specifies the position of the left edge of the component, in screen coordinates.
+  Top   Optional. Specifies the position of the top edge of the component, in screen coordinates.
+  Width   Optional. Specifies the width of the component, in screen units.
+  Height   Optional. Specifies the height of the component, in screen units.
+  */
+
+
+Rundll 32.exe User.exe,ExitWindows 
+
+ 
+
+ 
+
+ 
+
+出处：https://blog.csdn.net/koolfoo/article/details/16008
+
+官方参考：https://docs.microsoft.com/zh-cn/windows/win32/shell/objects
+
+====================================================================================
+
+常见问题
+1）常见FolderItem.Verbs使用方法
+
+复制代码
+'objFolder对象可以是文件夹、压缩包、文件等
+set objFolderItems = objFolder.Items
+            msgbox objFolderItems.Count            
+            
+            set it = objFolderItems.item(0)
+            msgbox it
+            set objVerbs = it.Verbs
+            msgbox objVerbs.count
+            msg=""
+            For i = 0 To objVerbs.count-1
+                msg = msg & objVerbs.Item(i)&"=="&i
+            Next
+            msgbox msg
+            'it.InvokeVerb("open")
+            it.InvokeVerbEx("delete")
+复制代码
+具体的其他用法，自己可以尝试
+
+2）使用  Folder.CopyHere(vItem [, vOptions]) 或者  Folder.MoveHere(vItem [, vOptions])  都是只能添加对象，如果想删除对象怎么办呢？
+
+虽然有 FolderItem.InvokeVerb 或者 FolderItem.InvokeVerbEx 方法，但是会有删除确认对话框，我暂时没有好的方法，在不提示的情况下直接删除文件。
+
+从网上参考：
+
+https://stackoverflow.com/questions/12388004/folderitem-invokeverbdelete-without-confirmation
+
+https://bbs.csdn.net/topics/394384419
+
+他们的做法是再次使用 MoveHere 方法，把不需要的文件或文件夹移除到其他地方。
+
+如果，您希望更容易地发现我的新博客，不妨点击一下绿色通道的【关注我】。(●'◡'●)
+
+如果对你有所帮助，赞助一杯咖啡！打             付款后有任何问题请给我留言!!!
+因为，我的写作热情也离不开您的肯定与支持，感谢您的阅读，我是【Jack_孟】！
+
+分类: vbs
+好文要顶 关注我 收藏该文 
+jack_Meng
+粉丝 - 2770 关注 - 89
++加关注
+00
+« 上一篇： vbs创建目录，可循环创建父级目录
+» 下一篇： 在vbs中WScript.Shell 与 Shell.Application 的不同
+posted on 2022-02-24 10:29  jack_Meng  阅读(999)  评论(0)  编辑  收藏  举报
+
+会员力量，点亮园子希望
+刷新页面返回顶部
+登录后才能查看或发表评论，立即 登录 或者 逛逛 博客园首页
+【推荐】编程路上的催化剂：大道至简，给所有人看的编程课
+【推荐】会员力量，点亮园子希望，期待您升级成为园子会员
+【推荐】腾讯云年度爆款2核2G云服务器118元/年，新老同享
+【推荐】阿里云暖冬特惠，2核2G轻量应用服务器首购61元/年
+
+编辑推荐：
+· 项目国际化的难点痛点是什么
+· 聊一聊 C# 的线程本地存储 TLS 到底是什么
+· 「ASP.NET Core」使用 SignalR 推送服务器日志
+· 如何保障 Cookie 的信息安全
+· 善用浏览器的一些调试技巧
+阅读排行：
+· 园子开店记-周边第一款：鼠标垫设计图出炉
+· 马某 说c# 不开源，他是蠢还是坏?
+· C#/.NET/.NET Core优秀项目和框架2023年12月简报
+· 零基础电气专业毕业生，花费9.9元自学前端，成都月薪6.5K
+· 我为博客园生商业化运营献计
+导航
+博客园
+首页
+新随笔
+联系
+订阅 订阅
+管理
+<	2024年1月	>
+日	一	二	三	四	五	六
+31	1	2	3	4	5	6
+7	8	9	10	11	12	13
+14	15	16	17	18	19	20
+21	22	23	24	25	26	27
+28	29	30	31	1	2	3
+4	5	6	7	8	9	10
+公告
+博志铭
+满博荒唐言，一把心酸泪。
+都云博主痴，谁解其中味。
+
+   Zero vs Master (No.15)
+
+
+您的浏览器不兼容canvas
+昵称： jack_Meng
+园龄： 13年
+粉丝： 2770
+关注： 89
++加关注
+搜索
+ 
+常用链接
+我的随笔
+我的评论
+我的参与
+最新评论
+我的标签
+积分与排名
+积分 - 4227935
+排名 - 15
+合集 (1)
+Git教程(8)
+随笔分类 (2979)
+_Del(2)
+AJAX(6)
+Android(22)
+Anthem.NET(8)
+ASP(3)
+ASP.NET(69)
+Asp.Net Core(72)
+AutoMapper(5)
+BAT(135)
+Bootstrap(7)
+C#(433)
+C# WinForm(147)
+C++(7)
+Cache(11)
+Caliburn.Micro(3)
+CGI(4)
+CI/CD(1)
+CodeSmith(2)
+CSS与界面美化(13)
+C语言(19)
+DDD(7)
+DevExpress(22)
+Docker(24)
+Eclipse(12)
+English(6)
+EntityFramework(11)
+ETL(3)
+Exception(6)
+Git(40)
+GitCode(2)
+HTML(18)
+IOC(20)
+Java(56)
+Java_IDEA(8)
+Java_UnitTest(2)
+JavaScript(178)
+Jenkins(13)
+jQuery(19)
+Json(24)
+Linux(89)
+Log4net(14)
+MessageQueue(18)
+MongoDB(2)
+MVC(28)
+Mysql(11)
+NodeJS(16)
+NPOI(3)
+Office(23)
+OpenCV(9)
+Oracle(96)
+OS(8)
+PowerDesigner(4)
+Prolog语言(1)
+Python(79)
+R(1)
+RaspberryPi(88)
+RPC(19)
+SharePoint(6)
+sql(64)
+Swagger(8)
+TensorFlow(14)
+Tools(6)
+UML(5)
+UnitTest(6)
+vbs(42)
+VS设置(42)
+Vue(13)
+WCF(4)
+WebKit开发(15)
+WorkFlow(4)
+WPF(46)
+XML(31)
+版本控制(33)
+博客园管理(34)
+单片机开发(2)
+第三方接口(12)
+股票彩票(4)
+汇编(27)
+计算机应用(199)
+计算机原理(12)
+架构之路(28)
+教育(9)
+逆向工程(3)
+其他(39)
+奇门遁甲(7)
+人工智能(60)
+日常查询(16)
+软件测试(56)
+诗词(9)
+数学(21)
+算法(49)
+微服务(5)
+微信开发(8)
+项目管理(69)
+虚拟机(6)
+音乐(8)
+正则表达式(8)
+阅读排行榜
+1. 数组指针和指针数组的区别(505085)
+2. Eclipse常用快捷键(493362)
+3. wireshark抓包新手使用教程(439384)
+4. SELECT INTO 和 INSERT INTO SELECT 两种表复制语句详解（SQL数据库和Oracle数据库的区别）(374221)
+5. 把Java程序打包成jar文件包并执行(335468)
+6. 手缝针法大全--缝补衣服针法（图文讲解，转自汉服制作研习吧）(287460)
+7. JS移动客户端--触屏滑动事件(230375)
+8. JS七种加密解密方法(205837)
+9. VisualSVN服务器的本地搭建和使用(195485)
+10. 变废为宝，用旧电脑自己DIY组建 NAS 服务器(195172)
+评论排行榜
+1. JS组件系列——JsPlumb制作流程图及相关效果详解(144)
+2. WiFi密码破解详细图文教程(33)
+3. C#调用RabbitMQ实现消息队列(14)
+4. 数组指针和指针数组的区别(14)
+5. Hibernate入门这一篇就够了(12)
+6. JS移动客户端--触屏滑动事件(12)
+7. nodejs的express使用介绍(11)
+8. C#中的依赖注入那些事儿(10)
+9. 使用C#创建Windows服务(9)
+10. Eclipse常用快捷键(9)
+推荐排行榜
+1. 数组指针和指针数组的区别(80)
+2. wireshark抓包新手使用教程(62)
+3. Hibernate入门这一篇就够了(36)
+4. Eclipse常用快捷键(29)
+5. JS组件系列——JsPlumb制作流程图及相关效果详解(21)
+6. JS移动客户端--触屏滑动事件(19)
+7. C#设计模式 ---- 总结汇总(17)
+8. C#中的依赖注入那些事儿(17)
+9. WiFi密码破解详细图文教程(17)
+10. 使用C#创建Windows服务(16)
+最新评论
+1. Re:vs平台工具集介绍以及安装
+平台工具集安装工具CSDN搜： VS平台工具集安装, 全平台,VS2022,VS2010,VS2008
+
+--Murry666
+2. Re:C#中的依赖注入那些事儿
+加油, 2023年底了 都值得 阅读
+
+--宋厚锦
+3. Re:记录--买不起劳力士，一气之下熬夜写一个
+老哥牛逼~
+
+--苏州の酱醋茶
+4. Re:C# 中捕获C/C++抛出的异常
+更新一下,没有效果,还是一样的直接死掉,没有抓到异常
+
+--小熊V5
+5. Re:C# 中捕获C/C++抛出的异常
+非常感谢,我找这个问题找了好久,因为导入了一个第三方厂商的DLL, 结果这个DLL把我整个程序都搞的不稳定了.
+
+--小熊V5
+6. Re:Winform 窗体遮罩层懒人处理法
+您好，這篇文章對我的幫助真大!謝謝您 😃 另外，可以請問您的visual studio 字體配置為何嗎(字體名稱、大小)? Theme是使用one dark pro嗎 覺得圖片中，您所使用的字型真的...
+--solars2015
+7. Re:SQL Server搭建故障转移群集
+请问生产环境AD域是必须搭建的吗？
+
+--Justtear
+8. Re:三步彻底关闭chrome谷歌浏览器自动更新
+单独拒绝system权限、改名这两个方法，可以让chrome更新失败，进而达成目的。
+
+--alwang27
+9. Re:强烈建议使用国外DNS解析域名，解决访问速度和某些访问故障！
+只要修改dns就好了吗，后面的去官网验证是什么意思？
+
+--明响
+10. Re:C#串口开发之SerialPort类封装
+Demo不能接收数据
+

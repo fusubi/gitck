@@ -1,0 +1,378 @@
+ASSOC          显示或修改文件扩展名关联。
+ATTRIB         显示或更改文件属性。
+BREAK          设置或清除扩展式 CTRL+C 检查。
+BCDEDIT        设置启动数据库中的属性以控制启动加载。
+CACLS          显示或修改文件的访问控制列表(ACL)。
+CALL           从另一个批处理程序调用这一个。
+CD             显示当前目录的名称或将其更改。
+CHCP           显示或设置活动代码页数。
+CHDIR          显示当前目录的名称或将其更改。
+CHKDSK         检查磁盘并显示状态报告。
+CHKNTFS        显示或修改启动时间磁盘检查。
+CLS            清除屏幕。
+CMD            打开另一个 Windows 命令解释程序窗口。
+COLOR          设置默认控制台前景和背景颜色。
+COMP           比较两个或两套文件的内容。
+COMPACT        显示或更改 NTFS 分区上文件的压缩。
+CONVERT        将 FAT 卷转换成 NTFS。你不能转换
+               当前驱动器。
+COPY           将至少一个文件复制到另一个位置。
+DATE           显示或设置日期。
+DEL            删除至少一个文件。
+DIR            显示一个目录中的文件和子目录。
+DISKPART       显示或配置磁盘分区属性。
+DOSKEY         编辑命令行、撤回 Windows 命令并
+               创建宏。
+DRIVERQUERY    显示当前设备驱动程序状态和属性。
+ECHO           显示消息，或将命令回显打开或关闭。
+ENDLOCAL       结束批文件中环境更改的本地化。
+ERASE          删除一个或多个文件。
+EXIT           退出 CMD.EXE 程序(命令解释程序)。
+FC             比较两个文件或两个文件集并显示
+               它们之间的不同。
+FIND           在一个或多个文件中搜索一个文本字符串。
+FINDSTR        在多个文件中搜索字符串。
+FOR            为一组文件中的每个文件运行一个指定的命令。
+FORMAT         格式化磁盘，以便用于 Windows。
+FSUTIL         显示或配置文件系统属性。
+FTYPE          显示或修改在文件扩展名关联中使用的文件
+               类型。
+GOTO           将 Windows 命令解释程序定向到批处理程序
+               中某个带标签的行。
+GPRESULT       显示计算机或用户的组策略信息。
+GRAFTABL       使 Windows 在图形模式下显示扩展
+               字符集。
+HELP           提供 Windows 命令的帮助信息。
+ICACLS         显示、修改、备份或还原文件和
+               目录的 ACL。
+IF             在批处理程序中执行有条件的处理操作。
+LABEL          创建、更改或删除磁盘的卷标。
+MD             创建一个目录。
+MKDIR          创建一个目录。
+MKLINK         创建符号链接和硬链接
+MODE           配置系统设备。
+MORE           逐屏显示输出。
+MOVE           将一个或多个文件从一个目录移动到另一个
+               目录。
+OPENFILES      显示远程用户为了文件共享而打开的文件。
+PATH           为可执行文件显示或设置搜索路径。
+PAUSE          暂停批处理文件的处理并显示消息。
+POPD           还原通过 PUSHD 保存的当前目录的上一个
+               值。
+PRINT          打印一个文本文件。
+PROMPT         更改 Windows 命令提示。
+PUSHD          保存当前目录，然后对其进行更改。
+RD             删除目录。
+RECOVER        从损坏的或有缺陷的磁盘中恢复可读信息。
+REM            记录批处理文件或 CONFIG.SYS 中的注释(批注)。
+REN            重命名文件。
+RENAME         重命名文件。
+REPLACE        替换文件。
+RMDIR          删除目录。
+ROBOCOPY       复制文件和目录树的高级实用工具
+SET            显示、设置或删除 Windows 环境变量。
+SETLOCAL       开始本地化批处理文件中的环境更改。
+SC             显示或配置服务(后台进程)。
+SCHTASKS       安排在一台计算机上运行命令和程序。
+SHIFT          调整批处理文件中可替换参数的位置。
+SHUTDOWN       允许通过本地或远程方式正确关闭计算机。
+SORT           对输入排序。
+START          启动单独的窗口以运行指定的程序或命令。
+SUBST          将路径与驱动器号关联。
+SYSTEMINFO     显示计算机的特定属性和配置。
+TASKLIST       显示包括服务在内的所有当前运行的任务。
+TASKKILL       中止或停止正在运行的进程或应用程序。
+TIME           显示或设置系统时间。
+TITLE          设置 CMD.EXE 会话的窗口标题。
+TREE           以图形方式显示驱动程序或路径的目录
+               结构。
+TYPE           显示文本文件的内容。
+VER            显示 Windows 的版本。
+VERIFY         告诉 Windows 是否进行验证，以确保文件
+               正确写入磁盘。
+VOL            显示磁盘卷标和序列号。
+XCOPY          复制文件和目录树。
+WMIC           在交互式命令 shell 中显示 WMI 信息。
+
+
+
+
+
+SCHTASKS /parameter [arguments]
+
+描述:
+    允许管理员创建、删除、查询、更改、运行和中止本地或远程系统上的计划任
+    务。
+
+参数列表:
+    /Create         创建新计划任务。
+
+    /Delete         删除计划任务。
+
+    /Query          显示所有计划任务。
+
+    /Change         更改计划任务属性。
+
+    /Run            按需运行计划任务。
+
+    /End            中止当前正在运行的计划任务。
+
+    /ShowSid        显示与计划的任务名称相应的安全标识符。
+
+    /?              显示此帮助消息。
+
+Examples:
+    SCHTASKS
+    SCHTASKS /?
+    SCHTASKS /Run /?
+    SCHTASKS /End /?
+    SCHTASKS /Create /?
+    SCHTASKS /Delete /?
+    SCHTASKS /Query  /?
+    SCHTASKS /Change /?
+    SCHTASKS /ShowSid /?
+
+C:\Users\LX>
+SCHTASKS /Query [/S system [/U username [/P [password]]]]
+         [/FO format | /XML [xml_type]] [/NH] [/V]
+         [/TN taskname] [/HRESULT] [/?]
+
+描述:
+    允许管理员显示本地或远程系统上的计划任务。
+
+参数列表:
+    /S    system         指定要连接到的远程系统。
+
+    /U    username       指定 schtasks.exe 要执行的用户上下文。
+
+    /P    [password]     指定给定的用户上下文密码。如果省略则
+                         提示输入。
+
+    /FO   format         为输出指定格式。有效值: TABLE、LIST、CSV。
+
+    /NH                  指定在输出中不显示列标题。
+                         只对 TABLE 格式有效。
+                         仅适用于 TABLE 和 CSV 格式。
+
+    /V                   显示详细任务输出。
+
+    /TN   taskname       指定要检索其信息的任务路径\名称，
+                         否则会检索所有任务的信息。
+
+    /XML  [xml_type]     以 XML 格式显示任务定义。
+
+                         如果 xml_type 为 ONE，则输出为一个有效 XML 文件。
+
+                         如果 xml_type 不存在，则输出将为
+
+                         所有 XML 任务定义的串联。
+
+    /HRESULT             为获得更出色的故障诊断能力，处理退出代码
+                         将采用 HRESULT 格式。
+
+    /?                   显示此帮助消息。
+
+示例:
+    SCHTASKS /Query
+    SCHTASKS /Query /?
+    SCHTASKS /Query /S system /U user /P password
+    SCHTASKS /Query /FO LIST /V /S system /U user /P password
+    SCHTASKS /Query /FO TABLE /NH /V
+
+C:\Users\LX>
+SCHTASKS /Create [/S system [/U username [/P [password]]]]
+    [/RU username [/RP password]] /SC schedule [/MO modifier] [/D day]
+    [/M months] [/I idletime] /TN taskname /TR taskrun [/ST starttime]
+    [/RI interval] [ {/ET endtime | /DU duration} [/K] [/XML xmlfile] [/V1]]
+    [/SD startdate] [/ED enddate] [/IT | /NP] [/Z] [/F] [/HRESULT] [/?]
+
+描述:
+     允许管理员在本地或远程系统上创建计划任务。
+
+参数列表:
+    /S   system        指定要连接到的远程系统。如果省略这个
+                       系统参数，默认是本地系统。
+
+    /U   username      指定应在其中执行 SchTasks.exe 的用户上下文。
+
+    /P   [password]    指定给定用户上下文的密码。如果省略则
+                       提示输入。
+
+    /RU  username      指定任务在其下运行的“运行方式”用户
+                       帐户(用户上下文)。对于系统帐户，有效
+                       值是 ""、"NT AUTHORITY\SYSTEM" 或
+                       "SYSTEM"。
+                       对于 v2 任务，"NT AUTHORITY\LOCALSERVICE"和
+                       "NT AUTHORITY\NETWORKSERVICE"以及常见的 SID
+                         对这三个也都可用。
+
+    /RP  [password]    指定“运行方式”用户的密码。要提示输
+                       入密码，值必须是 "*" 或无。系统帐户会忽略该
+                       密码。必须和 /RU 或 /XML 开关一起使用。
+
+/RU/XML    /SC   schedule     指定计划频率。
+                       有效计划任务:  MINUTE、 HOURLY、DAILY、WEEKLY、
+                       MONTHLY, ONCE, ONSTART, ONLOGON, ONIDLE, ONEVENT.
+
+    /MO   modifier     改进计划类型以允许更好地控制计划重复
+                       周期。有效值列于下面“修改者”部分中。
+
+    /D    days         指定该周内运行任务的日期。有效值:
+                       MON、TUE、WED、THU、FRI、SAT、SUN
+                       和对 MONTHLY 计划的 1 - 31
+                       (某月中的日期)。通配符“*”指定所有日期。
+
+    /M    months       指定一年内的某月。默认是该月的第一天。
+                       有效值: JAN、FEB、MAR、APR、MAY、JUN、
+                       JUL、 AUG、SEP、OCT、NOV  和 DEC。通配符
+                       “*” 指定所有的月。
+
+    /I    idletime     指定运行一个已计划的 ONIDLE 任务之前
+                       要等待的空闲时间。
+                       有效值范围: 1 到 999 分钟。
+
+    /TN   taskname     以路径\名称形式指定
+                       对此计划任务进行唯一标识的字符串。
+
+    /TR   taskrun      指定在这个计划时间运行的程序的路径
+                       和文件名。
+                       例如: C:\windows\system32\calc.exe
+
+    /ST   starttime    指定运行任务的开始时间。
+                       时间格式为 HH:mm (24 小时时间)，例如 14:30 表示
+                       2:30 PM。如果未指定 /ST，则默认值为
+                       当前时间。/SC ONCE 必需有此选项。
+
+    /RI   interval     用分钟指定重复间隔。这不适用于
+                       计划类型: MINUTE、HOURLY、
+                       ONSTART, ONLOGON, ONIDLE, ONEVENT.
+                       有效范围: 1 - 599940 分钟。
+                       如果已指定 /ET 或 /DU，则其默认值为
+                       10 分钟。
+
+    /ET   endtime      指定运行任务的结束时间。
+                       时间格式为 HH:mm (24 小时时间)，例如，14:50 表示 2:50 PM。
+                       这不适用于计划类型: ONSTART、
+                       ONLOGON, ONIDLE, ONEVENT.
+
+    /DU   duration     指定运行任务的持续时间。
+                       时间格式为 HH:mm。这不适用于 /ET 和
+                       计划类型: ONSTART, ONLOGON, ONIDLE, ONEVENT.
+                       对于 /V1 任务，如果已指定 /RI，则持续时间默认值为
+                       1 小时。
+
+    /K                 在结束时间或持续时间终止任务。
+                       这不适用于计划类型: ONSTART、
+                       ONLOGON, ONIDLE, ONEVENT.
+                       必须指定 /ET 或 /DU。
+
+    /SD   startdate    指定运行任务的第一个日期。
+                       格式为 yyyy/mm/dd。默认值为
+                       当前日期。这不适用于计划类型: ONCE、
+                       ONSTART, ONLOGON, ONIDLE, ONEVENT.
+
+    /ED   enddate      指定此任务运行的最后一天的日期。
+                       格式是 yyyy/mm/dd。这不适用于计划类型:
+                        ONCE、ONSTART、ONLOGON、ONIDLE。
+
+    /EC   ChannelName  为 OnEvent 触发器指定事件通道。
+
+    /IT                仅有在 /RU 用户当前已登录且
+                       作业正在运行时才可以交互式运行任务。
+                       此任务只有在用户已登录的情况下才运行。
+
+    /NP                不储存任何密码。任务以给定用户的身份
+                       非交互的方式运行。只有本地资源可用。
+
+    /Z                 标记在最终运行完任务后删除任务。
+
+    /XML  xmlfile      从文件的指定任务 XML 中创建任务。
+                       可以组合使用 /RU 和 /RP 开关，或者在任务 XML 已包含
+                       主体时单独使用 /RP。
+
+    /V1                创建 Vista 以前的平台可以看见的任务。
+                       不兼容 /XML。
+
+    /F                 如果指定的任务已经存在，则强制创建
+                       任务并抑制警告。
+
+    /RL   level        为作业设置运行级别。有效值为
+                       LIMITED 和 HIGHEST。默认值为 LIMITED。
+
+    /DELAY delaytime   指定触发触发器后延迟任务运行的
+                       等待时间。时间格式为
+                       mmmm:ss。此选项仅对计划类型
+                       ONSTART, ONLOGON, ONEVENT.
+
+    /HRESULT          为获得更出色的故障诊断能力，处理退出代码
+                       将采用 HRESULT 格式。
+
+    /?                 显示此帮助消息。
+
+修改者: 按计划类型的 /MO 开关的有效值:
+    MINUTE:  1 到 1439 分钟。
+    HOURLY:  1 - 23 小时。
+    DAILY:   1 到 365 天。
+    WEEKLY:  1 到 52 周。
+    ONCE:    无修改者。
+    ONSTART: 无修改者。
+    ONLOGON: 无修改者。
+    ONIDLE:  无修改者。
+    MONTHLY: 1 到 12，或
+             FIRST, SECOND, THIRD, FOURTH, LAST, LASTDAY。
+
+    ONEVENT:  XPath 事件查询字符串。
+示例:
+    ==> 在远程机器 "ABC" 上创建计划任务 "doc"，
+        该机器每小时在 "runasuser" 用户下运行 notepad.exe。
+
+        SCHTASKS /Create /S ABC /U user /P password /RU runasuser
+                 /RP runaspassword /SC HOURLY /TN doc /TR notepad
+
+    ==> 在远程机器 "ABC" 上创建计划任务 "accountant"，
+        在指定的开始日期和结束日期之间的开始时间和结束时间内，
+        每隔五分钟运行 calc.exe。
+
+        SCHTASKS /Create /S ABC /U domain\user /P password /SC MINUTE
+                 /MO 5 /TN accountant /TR calc.exe /ST 12:00 /ET 14:00
+                 /SD 06/06/2006 /ED 06/06/2006 /RU runasuser /RP userpassword
+
+    ==> 创建计划任务 "gametime"，在每月的第一个星期天
+        运行“空当接龙”。
+
+        SCHTASKS /Create /SC MONTHLY /MO first /D SUN /TN gametime
+                 /TR c:\windows\system32\freecell
+
+    ==> 在远程机器 "ABC" 创建计划任务 "report"，
+        每个星期运行 notepad.exe。
+
+        SCHTASKS /Create /S ABC /U user /P password /RU runasuser
+                 /RP runaspassword /SC WEEKLY /TN report /TR notepad.exe
+
+    ==> 在远程机器 "ABC" 创建计划任务 "logtracker"，
+        每隔五分钟从指定的开始时间到无结束时间，
+        运行 notepad.exe。将提示输入 /RP
+        密码。
+
+        SCHTASKS /Create /S ABC /U domain\user /P password /SC MINUTE
+                 /MO 5 /TN logtracker
+                 /TR c:\windows\system32\notepad.exe /ST 18:30
+                 /RU runasuser /RP
+
+    ==> 创建计划任务 "gaming"，每天从 12:00 点开始到
+        14:00 点自动结束，运行 freecell.exe。
+
+        SCHTASKS /Create /SC DAILY /TN gaming /TR c:\freecell /ST 12:00
+                 /ET 14:00 /K
+    ==> 创建计划任务“EventLog”以开始运行 wevtvwr.msc
+        只要在“系统”通道中发布事件 101
+
+        SCHTASKS /Create /TN EventLog /TR wevtvwr.msc /SC ONEVENT
+                 /EC System /MO *[System/EventID=101]
+    ==> 文件路径中可以加入空格，但需要加上两组引号，
+        一组引号用于 CMD.EXE，另一组用于 SchTasks.exe。用于 CMD
+        的外部引号必须是一对双引号；内部引号可以是一对单引号或
+        一对转义双引号:
+        SCHTASKS /Create
+           /tr "'c:\program files\internet explorer\iexplorer.exe'
+           \"c:\log data\today.xml\"" ..

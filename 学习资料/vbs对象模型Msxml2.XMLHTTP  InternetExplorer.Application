@@ -1,0 +1,335 @@
+VBS之Microsoft.XMLHTTP对象作者：Broly
+
+MSXML中提供了Microsoft.XMLHTTP对象，能够完成从数据包到Request对象的转换以及发送任务。
+创建XMLHTTP对象的语句如下：
+Set objXML = CreateObject("Msxml2.XMLHTTP") 或
+Set objXML = CreateObject(“Microsoft.XMLHTTP”)
+' Or, for version 3.0 of XMLHTTP, use:
+' Set xml = Server.CreateObject("MSXML2.ServerXMLHTTP")
+对象创建后调用Open方法对Request对象进行初始化，语法格式为：
+poster.open http-method, url, async, userID, password
+Open方法中包含了5个参数，前三个是必要的，后两个是可选的(在服务器需要进行身份验证时提供)。参数的含义如下所示： 
+http-method： HTTP的通信方式，比如GET或是 POST
+url： 接收XML数据的服务器的URL地址。通常在URL中要指明 ASP或CGI程序
+async：一个布尔标识，说明请求是否为异步的。如果是异步通信方式(true)，客户机就不等待服务器的响应；如果是同步方式(false)，客户机就要等到服务器返回消息后才去执行其他操作
+userID 用户ID，用于服务器身份验证
+password 用户密码，用于服务器身份验证
+XMLHTTP对象的Send方法
+用Open方法对Request对象进行初始化后，调用Send方法发送XML数据：
+poster.send XML-data
+Send方法的参数类型是Variant，可以是字符串、DOM树或任意数据流。发送数据的方式分为同步和异步两种。在异步方式下，数据包一旦发送完毕，就结束Send进程，客户机执行其他的操作；而在同步方式下，客户机要等到服务器返回确认消息后才结束Send进程。
+XMLHTTP对象中的readyState属性能够反映出服务器在处理请求时的进展状况。客户机的程序可以根据这个状态信息设置相应的事件处理方法。属性值及其含义如下表所示：
+值 说明
+0 Response对象已经创建，但XML文档上载过程尚未结束
+1 XML文档已经装载完毕
+2 XML文档已经装载完毕，正在处理中
+3 部分XML文档已经解析
+4 文档已经解析完毕，客户端可以接受返回消息
+客户机处理响应信息
+客户机接收到返回消息后，进行简单的处理，基本上就完成了C/S之间的一个交互周期。客户机接收响应是通过XMLHTTP对象的属性实现的：
+● responseTxt：将返回消息作为文本字符串；
+● responseXML：将返回消息视为XML文档，在服务器响应消息中含有XML数据时使用；
+● responseStream：将返回消息视为Stream对象。
+
+Set objXML = CreateObject("Microsoft.XMLHTTP") '创建XMLHTTP组件；
+UrlSend = "http://xxxx/"
+objXML.open "GET",UrlSend,false
+objXML.send()
+ReturnVar = objXML.responseText
+'处理返回数据做判断！
+
+'取得网页文件代码函数
+function getHTTPPage(url)
+dim http
+set http=createobject("MSXML2.XMLHTTP")
+Http.open "GET",url,false
+Http.send()
+if Http.readystate<>4 then
+ exit function
+end if
+getHTTPPage=bytes2BSTR(Http.responseBody)
+set http=nothing
+if err.number<>0 then err.Clear
+end function
+
+'字节转化成字符串函数
+Function bytes2BSTR(vIn)
+dim strReturn
+dim i,ThisCharCode,NextCharCode
+strReturn = ""
+For i = 1 To LenB(vIn)
+ThisCharCode = AscB(MidB(vIn,i,1))
+If ThisCharCode < &H80 Then
+strReturn = strReturn & Chr(ThisCharCode)
+Else
+NextCharCode = AscB(MidB(vIn,i+1,1))
+strReturn = strReturn & Chr(CLng(ThisCharCode) * &H100 + CInt(NextCharCode))
+i = i + 1
+End If
+Next
+bytes2BSTR = strReturn
+End Function
+
+比如你的myurl="www.163.com"
+Content = getHTTPPage(myurl)
+你可以response.write出content来看,然后用instr,mid,replace提炼出页面的主题
+
+2
+
+Function GetHTTPPage(url) '获取服务器生成的html代码
+ on error resume next
+ dim XmlHttp
+ set XmlHttp=Server.createobject("Microsoft.XMLHTTP")
+ XmlHttp.open "GET",url,false
+ XmlHttp.send()
+ 'getHTTPPage=Http.responseText
+ if XmlHttp.readystate<>4 then exit function
+ GetHTTPPage=bytes2BSTR(XmlHttp.responseBody)
+ set XmlHttp=nothing
+ if err.number<>0 then err.Clear
+End Function
+
+Function Bytes2bStr(vin)
+  Dim BytesStream,StringReturn
+  Set BytesStream = Server.CreateObject("ADODB.Stream")
+  BytesStream.Type = 2
+  BytesStream.Open
+  BytesStream.WriteText vin
+  BytesStream.Position = 0
+  BytesStream.Charset = "GB2312"
+  BytesStream.Position = 2
+  StringReturn =BytesStream.ReadText
+  BytesStream.close
+  Set BytesStream = Nothing
+  Bytes2bStr = StringReturn
+End Function
+
+3
+
+function GetXml(Url){
+try{
+ var XmlHttp=Server.CreateObject("Microsoft.XMLHTTP");
+ XmlHttp.open("get",Url,false);
+ XmlHttp.send();
+ return XmlHttp.responseBody;
+}catch(e){return null}
+}
+function Bytes2bStr(vin){
+try{
+ var BytesStream,StringReturn;
+ BytesStream = Server.CreateObject("ADODB.Stream")
+ with(BytesStream){
+  Type =2;
+  Open();
+  WriteText(vin);
+  Position = 0 ;
+  Charset = "GB2312";
+  Position = 2;
+  StringReturn = ReadText();
+  close();
+ }
+ BytesStream = null
+ return StringReturn;
+}catch(e){return ""}
+
+
+}
+
+Set ie=WScript.CreateObject("internetexplorer.application")
+ie.menubar=0 '不显示IE对象菜单栏
+ie.AddressBar=0 '不显示IE对象地址栏
+ie.ToolBar=0 '不显示IE对象工具栏
+ie.StatusBar=0 '不显示IE对象状态栏
+ie.FullScreen=1 '全屏化IE对象
+ie.Width=800 '设置IE对象宽度
+ie.Height=600 '设置IE对象高度
+ie.Resizable=0 '设置IE对象大小是否可以被改动
+ie.visible=1 '设置是否可见
+ie.Navigate "https://www.jb51.net" '设置IE对象默认指向的页面
+
+目的留个备份，方便我以后去MSDN上找用法。
+
+InternetExplorer Object
+
+42 out of 82 rated this helpful Rate this topic
+
+Controls an instance of Windows Internet Explorer through automation.
+
+Members Table
+
+The following table lists the members exposed by the InternetExplorer object.
+
+Events
+
+Event	Description
+BeforeNavigate	Fires before navigation occurs in the given object (on either a window or frameset element).
+BeforeNavigate2	Fires before navigation occurs in the given object (on either a window element or a frameset element).
+CommandStateChange	Fires when the enabled state of a command changes.
+DocumentComplete	Fires when a document is completely loaded and initialized.
+DownloadBegin	Fires when a navigation operation begins.
+DownloadComplete	Fires when a navigation operation finishes, is halted, or fails.
+FileDownload	Fires to indicate that a file download is about to occur. If a file download dialog box can be displayed, this event fires prior to the appearance of the dialog box.
+NavigateComplete	Fires after a navigation to a link is completed on either a window element or a frameSet element.
+NavigateComplete2	Fires after a navigation to a link is completed on a window element or a frameSet element.
+NavigateError	Fires when an error occurs during navigation.
+NewProcess	Creates a new process to handle the navigation.
+NewWindow	Fires when a new window is to be created.
+NewWindow2	Fires when a new window is to be created.
+NewWindow3	Raised when a new window is to be created. Extends NewWindow2 with additional information about the new window.
+OnFullScreen	Fires when the FullScreen property is changed.
+OnMenuBar	Fires when the MenuBar property is changed.
+OnQuit	Fires before the Internet Explorer application quits.
+OnStatusBar	Fires when the StatusBar property is changed.
+OnTheaterMode	Fires when the TheaterMode property is changed.
+OnToolBar	Fires when the ToolBar property is changed.
+OnVisible	Fires when the Visible property of the object is changed.
+PrintTemplateInstantiation	Fires when a print template is instantiated.
+PrintTemplateTeardown	Fires when a print template is destroyed.
+PrivacyImpactedStateChange	Fired when an event occurs that impacts privacy, or when a user navigates away from a URL that has impacted privacy.
+ProgressChange	Fires when the progress of a download operation is updated on the object.
+PropertyChange	Fires when the PutProperty method of the object changes the value of a property.
+RedirectXDomainBlocked	Fired when a cross-domain redirect request is blocked.
+SetPhishingFilterStatus	Fires to indicate the progress and status of Microsoft Phishing Filter analysis of the current webpage.
+SetSecureLockIcon	Fires when there is a change in encryption level.
+StatusTextChange	Fires when the status bar text of the object has changed.
+ThirdPartyUrlBlocked	Fired when a third-party URL is blocked.
+TitleChange	Fires when the title of a document in the object becomes available or changes.
+UpdatePageStatus	Not implemented.
+WindowActivate	Not implemented.
+WindowMove	Not implemented.
+WindowResize	Not implemented.
+WindowStateChanged	Fires when the visibility state of a content window, such as the browser window or a tab, changes.
+Methods
+
+Method	Description
+ClientToWindow	Computes the full size of the browser window when given the specified width and height of the content area.
+ExecWB	Executes a command and returns the status of the command execution using the IOleCommandTarget interface.
+GetProperty	Gets the value associated with a user-defined property name.
+GoBack	Navigates backward one item in the history list.
+GoForward	Navigates forward one item in the history list.
+GoHome	Navigates to the current home or start page.
+GoSearch	Navigates to the current search page.
+Navigate	Navigates to a resource identified by a URL or to a file identified by a full path.
+Navigate2	Navigates the browser to a location that might not be expressed as a URL, such as a pointer to an item identifier list (PIDL) for an entity in the Windows Shell namespace.
+PutProperty	Associates a user-defined name/value pair with the object.
+QueryStatusWB	Queries the object for the status of commands using the IOleCommandTarget interface.
+Quit	Closes the object.
+Refresh	Reloads the file that is currently displayed in the object.
+Refresh2	Reloads the file that is currently displayed with the specified refresh level.
+ShowBrowserBar	Shows or hides a specified browser bar.
+Stop	Cancels a pending navigation or download, and stops dynamic page elements, such as background sounds and animations.
+Properties
+
+Property	Description
+AddressBar	Sets or gets a value that indicates whether the address bar of the object is visible or hidden.
+Application	Gets the automation object for the application that is hosting the WebBrowser Control.
+Busy	Gets a value that indicates whether the object is engaged in a navigation or downloading operation.
+Container	Gets an object reference to a container.
+Document	Gets the automation object of the active document, if any.
+FullName	Retrieves the fully qualified path of the Internet Explorer executable.
+FullScreen	Sets or gets a value that indicates whether Internet Explorer is in full-screen mode or normal window mode.
+Height	Sets or gets the height of the object.
+HWND	Gets the handle of the Internet Explorer main window.
+Left	Sets or gets the coordinate of the left edge of the object.
+LocationName	Retrieves the path or title of the resource that is currently displayed.
+LocationURL	Gets the URL of the resource that is currently displayed.
+MenuBar	Sets or gets a value that indicates whether the Internet Explorer menu bar is visible.
+Name	Retrieves the frame name or application name of the object.
+Offline	Sets or gets a value that indicates whether the object is operating in offline mode.
+Parent	Gets the parent of the object.
+Path	Retrieves the system folder of the Internet Explorer executable.
+ReadyState	Gets the ready state of the object.
+RegisterAsBrowser	Sets or gets a value that indicates whether the object is registered as a top-level browser window.
+RegisterAsDropTarget	Sets or gets a value that indicates whether the object is registered as a drop target for navigation.
+Resizable	Sets or gets a value that indicates whether the object can be resized.
+Silent	Sets or gets a value that indicates whether the object can display dialog boxes.
+StatusBar	Sets or gets a value that indicates whether the status bar for the object is visible.
+StatusText	Sets or gets the text in the status bar for the object.
+TheaterMode	Sets or gets whether the object is in theater mode.
+ToolBar	Sets or gets whether toolbars for the object are visible.
+Top	Sets or gets the coordinate of the top edge of the object.
+TopLevelContainer	Gets a value that indicates whether the object is a top-level container.
+Type	Gets the user type name of the contained document object.
+Visible	Sets or gets a value that indicates whether the object is visible or hidden.
+Width	Sets or gets the width of the object.
+Remarks
+
+Internet Explorer 8. On Windows Vista, to create an instance of Internet Explorer running at a medium integrity level, pass CLSID_InternetExplorerMedium (defined in exdisp.idl) to CoCreateInstance. The resulting InternetExplorerMedium object supports the same events, methods, and properties as the InternetExplorer object.
+
+Examples
+
+The following example uses CreateObject in Microsoft Visual Basic to launch an instance of Internet Explorer.
+
+The following C# example launches an instance of Internet Explorer and navigates to a Web page. The code also demonstrates how to create an event handler to listen for the BeforeNavigate2 event. The project requires a reference to the Microsoft Internet Controls (SHDocVw) type library.
+
+Object Information
+
+CLSID	CLSID_InternetExplorer
+Minimum availability	Internet Explorer 4.0
+Minimum operating systems	Windows 98, Windows CE 4.
+
+Set os=CreateObject("wscript.shell")
+Set os0=CreateObject("shell.application")
+Do 
+input1=InputBox(" 请选择："+chr(13)+chr(13)+ _
+        "1. 全部窗口最小化"+chr(13)+ _ 
+        "2. 窗口状态复原"+chr(13)+ _ 
+        "3. 窗口均匀平铺"+chr(13)+ _
+        "4. 窗口纵向平铺"+chr(13)+ _
+        "5. 窗口重叠展开" +Chr(13)+ _
+        "6. 资源管理器"+chr(13)+ _ 
+        "7. 设置系统时间" +Chr(13) + _
+        "8. 刷新系统菜单" +Chr(13)+ _
+        "9. 手动设置开始菜单"+Chr(13)+ _
+        "10. 搜索文件"+Chr(13)+ _
+        "11. 搜索计算机"+Chr(13)+ _
+        "12. 运行"+Chr(13)+ _ 
+        "13. 帮助"+Chr(13)+ _
+        "14. 打开文件夹"+Chr(13)+ _
+        "15. 挂起系统"+Chr(13)+ _
+        "16. 关闭系统" +Chr(13)+ _
+        "","vbs shell32 功能调用")
+Select Case input1
+Case 1
+     os0.MinimizeAll
+Case 2
+     os0.UndoMinimizeALL
+Case 3
+     os0.TileHorizontally
+Case 4
+     os0.TileVertically
+Case 5
+     os0.CascadeWindows
+Case 6
+     p1=os.SpecialFolders("desktop")
+     os0.Explore(p1)
+Case 7
+     os0.SetTime
+Case 8
+     os0.RefreshMenu
+Case 9
+     os0.TrayProperties
+Case 10
+     os0.FindFiles
+Case 11
+     os0.FindComputer
+Case 12
+     os0.FileRun
+Case 13
+     os0.Help
+Case 14
+     Set path1=os0.BrowseForFolder(0,"选择要打开的文件夹:",0)
+     If path1 Is Nothing Then 
+     Else
+      os0.Open(path1.self.path)
+     End If
+Case 15
+     os0.Suspend
+Case 16 
+     os0.ShutdownWindows
+Case ""
+     Exit Do
+Case Else 
+     os.Popup "选择错误",2,"错误",64+0
+End Select
+loop

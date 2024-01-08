@@ -1,0 +1,777 @@
+bat脚本基本命令和格式
+bat脚本
+BAT脚本与shell脚本区别
+Shell脚本使用Linux/Unix下的命令，一般文件开头以#号来告诉系统这个脚本需要什么解释器来执行（如：#!/bin/bash采用bash而不是dash来执行）。而bat文件是dos下的批处理文件。批处理文件是无格式的文本文件，它包含一条或多条命令，它的文件扩展名为.bat 或.cmd。
+
+常用命令1：where、cls、title、color、mode con
+Where
+
+显示符合搜索模式的文件位置： Where \R C:\ *.dll        \F \T
+
+Cls：清屏
+
+Title
+
+设置控制台BAT的标题
+
+Color
+
+设置bat显示的背景和前景色：color 02 （背景黑色，字符绿色）
+
+MODE CON
+
+设置bat的设置窗体大小：MODE CON COLS=200 LINES=1000
+
+常用命令2：@、echo、::、rem、pause、:和goto、%以及if
+@
+
+@的作用就是让脚本在执行时不显示命令部分：@echo off
+
+echo
+
+echo命令的另一种用法一：可以用它来显示信息：echo Edit by CODERED
+
+echo命令的另一种用法二：可以直接编辑文本文件：echo nbtstat -A 192.168.0.1 > a.bat
+
+::、rem
+
+::和rem是注释命令:  ::close echo
+
+与rem不同的是，::后的字符行在执行时不会回显, 无论是否用echo on打开命令行回显状态，另外，rem 可以用于config.sys文件中.
+
+pause
+
+pause是暂停命令：pause
+
+:和goto
+
+goto是个跳转命令，: 是一个标签,当程序运行到goto时，将自动跳转到:定义的部分去执行了：
+
+……
+
+goto end
+
+……
+
+:end
+
+%
+
+%是批处理变量引导符，为命令行传递给批处理的参数（多个%一起使用的情况除外，以后还将详细介绍）:
+
+set p=”abcdefg” & echo %p:~3,2%
+
+If
+
+输入判断: if "%1"=="" goto usage
+
+存在判断:
+
+if exist C:\Progra~1\Tencent\AD\*.gif del C:\Progra~1\Tencent\AD\*.gif
+
+结果判断: if errorlevel 1 pause & edit %1.asm
+
+常用命令3：call、find、for、set、shift
+Call
+
+call命令用来从一个批处理脚本中调用另一个批处理脚本：
+
+echo %1 This is a call example.
+
+call a.bat
+
+find
+
+find用来在文件中搜索特定字符串，通常也作为条件判断的铺垫程序：
+
+type a.txt | find "7626" && echo "Congratulations! You have infected GLACIER!"
+
+shift
+
+改变传入的参数偏移量，如将%3移位到%2，将%4移位到%3，等等；并且不影响%0和%1：
+
+SHIFT /2
+
+Set
+
+显示、设置或删除cmd.exe环境变量。
+
+Set path=”D:\”
+Set /p input=请输入： & echo 你输入的是：%input%
+setlocal enabledelayedexpansion
+Set /p input=请输入： & echo 你输入的是：!input!
+
+For
+
+基本格式：
+
+FOR %%variable IN (set) DO command [command-parameters]
+
+/D参数（匹配目录）：
+
+for /d %%i in (c:\*) do echo %%i
+
+/R参数（匹配文件）
+
+for /r [c:\] %%i in (???.exe) do if exist %%i echo %%i
+
+/L参数（该集表示以增量形式从开始到结束的一个数字序列）
+
+for /l %%i in (1,1,5) do @echo %%i
+
+/F参数
+
+使用文件解析来处理命令输出、字符串及文件内容。使用迭代变量定义要检查的内容或字符串，并使用各种options选项进一步修改解析方式。默认情况下，/F 传递每个文件每一行的第一个空白分隔符号。跳过空行。
+
+for /f "[eol=; skip=1] delims=" %%i in ('net user') do @echo %%i
+
+管道命令 |、>、>>、>、>&、<&
+|
+
+|命令的作用，就是让前一命令的输出当做后一命令的输入：
+
+help | more，ipconfig /all | find “IPv4”
+
+>
+
+>会清除掉原有文件中的内容后把新的内容写入原文件: echo @echo off > a.bat
+
+>>
+
+>>只会另起一行追加新的内容到原文件中，而不会改动其中的原有内容：
+
+echo exit >> a.bat
+
+<
+
+<是输入重定向命令，从文件中读入命令输入，而不是从键盘中读入
+
+>&
+
+>&将一个句柄的输出写入到另一个句柄的输入中
+
+<&
+
+<&刚好和>&相反，从一个句柄读取输入并将其写入到另一个句柄输出中
+
+组合命令：&、&&、||
+组合命令，顾名思义，就是可以把多个命令组合起来当一个命令来执行，那么这多个命令就要用这些组合命令连接起来放在同一行，因为批处理认行不认命令数目
+
+&
+
+&命令作用是用来连接n个DOS命令，并把这些命令按顺序执行，而不管是否有命令执行失败：
+
+copy a.txt b.txt /y & del a.txt
+
+&&
+
+&&可以把它前后两个命令组合起来当一个命令来用，一旦发现有命令出错将不继续执行剩下的命令：
+
+dir 文件://1%/www/user.mdb && copy 文件://1%/www/user.mdb e:\backup\www
+
+if exist 文件://1%/www/user.mdb copy 文件://1%/www/user.mdb e:\backup\www
+
+dir c:\ && dir d:\ > a.txt；
+
+得不到预期结果必须：
+
+dir c:\ > a.txt && dir d:\ >> a.txt
+
+||
+
+||命令执行正确就退出此命令组合，不再执行剩下的命令：
+
+dir s*.exe || echo Didn't exist file s*.exe & pause & exit
+
+ 
+
+其他符号：，、；、””、()、！
+;
+
+分号，当命令相同时，可以将不同目标用；来隔离，但执行效果不变，如执行过程中发生错误，则只返回错误报告，但程序仍会执行。
+
+dir c:\;d:\;e:\;z:\ > 1.txt
+
+，
+
+逗号相当于空格，在某些情况下“,”可以用来当做空格使用：
+
+dir,C:\
+
+“”
+
+双引号允许在字符串中包含空格:
+
+cd,"C:\ program files"
+
+()
+
+小括号在批处理编程中有特殊的作用，左右括号必须成对使用，括号中可以包括多行命令，这些命令将被看成一个整体，视为一条命令行。
+
+(echo a && echo bb) > 1.txt
+
+!
+
+在变量延迟问题中，用来表示变量，即%var%应该表示为!var!
+
+Set /p input=请输入： & echo 你输入的是：!input!
+
+if…else…条件语句
+DOS条件语句主要有以下形式
+
+IF [NOT] ERRORLEVEL number command
+
+IF [NOT] string1==string2 command
+
+IF [NOT] EXIST filename command
+
+增强用法：IF [/I] string1 compare-op string2 command
+
+增强用法中加上/I就不区分大小写了!
+
+增强用法中还有一些用来判断数字的符号：
+
+EQU - 等于
+
+NEQ - 不等于
+
+LSS - 小于
+
+LEQ - 小于或等于
+
+GTR - 大于
+
+GEQ - 大于或等于
+
+上面的command命令都可以用小括号来使用多条命令的组合，包括else子句，组合命令中可以嵌套使用条件或循环命令。
+
+IF EXIST filename (
+
+del filename
+
+) ELSE (
+
+echo filename missing
+
+)
+
+循环语句
+指定次数循环
+
+FOR /L %variable IN (start,step,end) DO command [command-parameters]
+
+组合命令：
+
+FOR /L %variable IN (start,step,end) DO (
+
+Command1
+
+Command2
+
+……
+
+)
+
+对某集合执行循环语句。
+
+FOR %%variable IN (set) DO command [command-parameters]
+
+%%variable
+指定一个单一字母可替换的参数。
+
+(set)
+指定一个或一组文件。可以使用通配符。
+
+command
+对每个文件执行的命令，可用小括号使用多条命令组合。
+
+FOR /R [[drive:]path] %variable IN (set) DO command [command-parameters]
+
+同前面一样，command可以用括号来组合：
+
+FOR /R [[drive:]path] %variable IN (set) DO (
+
+Command1
+
+Command2
+
+……
+
+commandn
+
+)
+
+条件循环
+
+上面的循环结构是用for命令来实现的，for命令循环有一个缺点，就是整个循环被当作一条命令语句，涉及到变量延迟的问题。
+
+利用goto语句和if条件判断，dos可以实现条件循环：
+
+@echo off
+
+set var=0
+
+rem ************循环开始了
+
+:continue
+
+set /a var+=1
+
+echo 第%var%次循环
+
+if %var% lss 100 goto continue
+
+rem ************循环结束了
+
+echo 循环执行完毕
+
+pause
+
+子程序
+在批处理程序中可以调用外部可运行程序，比如exe程序，也可调用其他批处理程序，批处理可以调用本程序中的一个程序段，相当于子程序，这些子程序一般放在主程序后面。
+
+子程序调用格式：
+
+CALL :label arguments
+
+子程序语法：
+
+:label
+
+command1
+
+command2
+
+......
+
+commandn
+
+goto :eof
+
+在子程序段中，参数%0指标签:label
+
+子过程一般放在最后，并且注意在主程序最后要加上exit或跳转语句，避免错误的进入子过程。
+
+子程序和主程序中的变量都是全局变量，其作用范围都是整个批处理程序。
+
+传至子程序的参数在call语句中指定，在子程序中用%1、%2至%9的形式调用，而子程序返回主程序的数据只需在调用结束后直接引用就可以了，当然也可以指定返回变量。
+
+打印你好：
+
+@echo off
+
+call :sub return
+
+echo 子程序返回值：%return%
+
+pause
+
+goto :eof
+
+:sub
+
+set %1=你好
+
+goto :eof
+
+设计一个求多个整数相加的子程序：
+
+@echo off
+
+set sum=0
+
+call :sub 10 20 35 40 50
+
+echo 数据求和结果：%sum%
+
+pause
+
+goto :eof
+
+:sub
+
+rem 参数1为返回变量名称
+
+set /a sum+=%1
+
+shift /1
+
+if not "%1"=="" goto sub
+
+goto :eof
+
+运行结果：155
+
+变量嵌套与命令嵌套
+和其它编程语言相比，dos功能显得相对简单，要实现比较复杂的功能，需要充分运用各种技巧，变量嵌套与命令嵌套就是此类技巧之一。
+
+简单的说，命令嵌套首先用一条dos命令生成一个字符串，而这个字符串是另一条dos命令，用call语句调用字符串将其执行，从而得到最终结果。
+
+用call语句实现命令嵌套：
+
+@echo off
+
+set str1=aaa echo ok bbb
+
+echo 初始字符串：%str1%
+
+echo 生成命令字符串如下：
+
+echo %str1:~4,7%
+
+echo 运行命令字符串生成最终结果为：
+
+call %str1:~4,7%
+
+pause
+
+C:\Users\LX>set /?
+显示、设置或删除 cmd.exe 环境变量。
+
+SET [variable=[string]]
+
+  variable  指定环境变量名。
+  string    指定要指派给变量的一系列字符串。
+
+要显示当前环境变量，键入不带参数的 SET。
+
+如果命令扩展被启用，SET 会如下改变:
+
+可仅用一个变量激活 SET 命令，等号或值不显示所有前缀匹配
+SET 命令已使用的名称的所有变量的值。例如:
+
+    SET P
+
+会显示所有以字母 P 打头的变量
+
+如果在当前环境中找不到该变量名称，SET 命令将把 ERRORLEVEL
+设置成 1。
+
+SET 命令不允许变量名含有等号。
+
+在 SET 命令中添加了两个新命令行开关:
+
+    SET /A expression
+    SET /P variable=[promptString]
+
+/A 命令行开关指定等号右边的字符串为被评估的数字表达式。该表达式
+评估器很简单并以递减的优先权顺序支持下列操作:
+
+    ()                  - 分组
+    ! ~ -               - 一元运算符
+    * / %               - 算数运算符
+    + -                 - 算数运算符
+    << >>               - 逻辑移位
+    &                   - 按位“与”
+    ^                   - 按位“异”
+    |                   - 按位“或”
+    = *= /= %= += -=    - 赋值
+      &= ^= |= <<= >>=
+    ,                   - 表达式分隔符
+
+如果你使用任何逻辑或取余操作符， 你需要将表达式字符串用
+引号扩起来。在表达式中的任何非数字字符串键作为环境变量
+名称，这些环境变量名称的值已在使用前转换成数字。如果指定
+了一个环境变量名称，但未在当前环境中定义，那么值将被定为
+零。这使你可以使用环境变量值做计算而不用键入那些 % 符号
+来得到它们的值。如果 SET /A 在命令脚本外的命令行执行的，
+那么它显示该表达式的最后值。该分配的操作符在分配的操作符
+左边需要一个环境变量名称。除十六进制有 0x 前缀，八进制
+有 0 前缀的，数字值为十进位数字。因此，0x12 与 18 和 022
+相同。请注意八进制公式可能很容易搞混: 08 和 09 是无效的数字，
+因为 8 和 9 不是有效的八进制位数。(& )
+
+/P 命令行开关允许将变量数值设成用户输入的一行输入。读取输入
+行之前，显示指定的 promptString。promptString 可以是空的。
+
+环境变量替换已如下增强:
+
+    %PATH:str1=str2%
+
+会扩展 PATH 环境变量，用 "str2" 代替扩展结果中的每个 "str1"。
+要有效地从扩展结果中删除所有的 "str1"，"str2" 可以是空的。
+"str1" 可以以星号打头；在这种情况下，"str1" 会从扩展结果的
+开始到 str1 剩余部分第一次出现的地方，都一直保持相配。
+
+也可以为扩展名指定子字符串。
+
+    %PATH:~10,5%
+
+会扩展 PATH 环境变量，然后只使用在扩展结果中从第 11 个(偏
+移量 10)字符开始的五个字符。如果没有指定长度，则采用默认
+值，即变量数值的余数。如果两个数字(偏移量和长度)都是负数，
+使用的数字则是环境变量数值长度加上指定的偏移量或长度。
+
+    %PATH:~-10%
+
+会提取 PATH 变量的最后十个字符。
+
+    %PATH:~0,-2%
+
+会提取 PATH 变量的所有字符，除了最后两个。
+
+终于添加了延迟环境变量扩充的支持。该支持总是按默认值被
+停用，但也可以通过 CMD.EXE 的 /V 命令行开关而被启用/停用。
+请参阅 CMD /?
+
+考虑到读取一行文本时所遇到的目前扩充的限制时，延迟环境
+变量扩充是很有用的，而不是执行的时候。以下例子说明直接
+变量扩充的问题:
+
+    set VAR=before
+    if "%VAR%" == "before" (
+        set VAR=after
+        if "%VAR%" == "after" @echo If you see this, it worked
+    )
+
+不会显示消息，因为在读到第一个 IF 语句时，BOTH IF 语句中
+的 %VAR% 会被代替；原因是: 它包含 IF 的文体，IF 是一个
+复合语句。所以，复合语句中的 IF 实际上是在比较 "before" 和
+"after"，这两者永远不会相等。同样，以下这个例子也不会达到
+预期效果:
+
+    set LIST=
+    for %i in (*) do set LIST=%LIST% %i
+    echo %LIST%
+
+原因是，它不会在目前的目录中建立一个文件列表，而只是将
+LIST 变量设成找到的最后一个文件。这也是因为 %LIST% 在
+FOR 语句被读取时，只被扩充了一次；而且，那时的 LIST 变量
+是空的。因此，我们真正执行的 FOR 循环是:
+
+    for %i in (*) do set LIST= %i
+
+这个循环继续将 LIST 设成找到的最后一个文件。
+
+延迟环境变量扩充允许你使用一个不同的字符(惊叹号)在执行
+时间扩充环境变量。如果延迟的变量扩充被启用，可以将上面
+例子写成以下所示，以达到预期效果:
+
+    set VAR=before
+    if "%VAR%" == "before" (
+        set VAR=after
+        if "!VAR!" == "after" @echo If you see this, it worked
+    )
+
+    set LIST=
+    for %i in (*) do set LIST=!LIST! %i
+    echo %LIST%
+
+如果命令扩展被启用，有几个动态环境变量可以被扩展，但不会出现在 SET 显示的变
+量列表中。每次变量数值被扩展时，这些变量数值都会被动态计算。如果用户用这些
+名称中任何一个明确定义变量，那个定义会替代下面描述的动态定义:
+
+%CD% - 扩展到当前目录字符串。
+
+%DATE% - 用跟 DATE 命令同样的格式扩展到当前日期。
+
+%TIME% - 用跟 TIME 命令同样的格式扩展到当前时间。
+
+%RANDOM% - 扩展到 0 和 32767 之间的任意十进制数字。
+
+%ERRORLEVEL% - 扩展到当前 ERRORLEVEL 数值。
+
+%CMDEXTVERSION% - 扩展到当前命令处理器扩展版本号。
+
+%CMDCMDLINE% - 扩展到调用命令处理器的原始命令行。
+
+%HIGHESTNUMANODENUMBER% - 扩展到此计算机上的最高 NUMA 节点号。
+falsefalse
+GitCode
+InsCode
+xcopy和copy区别
+一，copy不能在有子目录存在的文件中拷贝文件的同时重命名此文件名
+说明，这里Ｃ：为根目录,bat为子目录)，而xcopy能，不过会出现提示，当然可以加参数而不使它提示。
+
+C:\>copy c:\bat\hai.bat d:\bat\hello.bat
+1
+提示:系统找不到指定的路径。
+已复制 0 个文件。
+可以这样：
+
+C:\>copy c:\hai.bat d:\hell.bat 
+1
+已复制 1 个文件
+
+C:\>xcopy c:\bat\hai.bat d:\bat\hello.bat 
+1
+目标 D:\bat\hello.bat 是文件名
+还是目录名
+(F = 文件，D = 目录)? f
+C:\bat\hai.bat
+复制了 1 个文件
+二，copy命令能合并两个文件，而xcopy不能
+将文件1.txt和2.txt合并为3.txt
+
+copy /b c:\1.txt+2.txt c:\3.txt
+1
+命令格式：copy /b 文件1+文件2+…文件N 合并后的文件名
+命令讲解：使用“+”将多个相同或不同格式的文件合并为一个文件。
+小提示：
+1，在尾部隐藏了文本数据的图片文件，在使用了其他文件编辑器并保存后，隐藏的文本数据有可能丢失。
+2，MP3文件在使用此方法连接后，就可以实现连续播放。
+3，合成图片/歌曲这样的二进制文件必须使用/b参数（b代表Binaty,二进制），否则将会失败；
+另一个合并参数是/a(ASCII,文本文件），只能用于纯文本的合并。
+两参数不能同时使用，二进制方式可以合并文本文件和二进制文件，而文本方式用于纯文本的合并。
+三，C:>copy c:\bat\hai d:\hello
+命令解释：将C盘bat目录下所有文件复制到D盘hello目录下。你如果要选择指定定类型的文件（如txt文件）到D:\hello下的，则可以用：
+复制代码 代码如下:
+
+C:\>copy c:\bat\hai\*.txt d:\hello
+1
+说明：不会复制子目录下的文件及文件夹。D盘hello目录必须存在
+
+C:\>xcopy c:\bat\hai d:\hello /e/h
+1
+命令解释：
+将C盘bat文件夹拷进D盘hello文件夹，包括所有子目录及具有隐藏和系统文件属性的文件。无论hello文件夹是否已经存在，如果不存在的话系统会提示你创建。
+说明：
+/e表示复制所有子目录，包括空目录。/h复制具有隐藏和系统文件属性的文件。
+
+copy命令用法：
+
+E:\Work\Project_Experience\bat_script>copy /?
+将一份或多份文件复制到另一个位置。
+
+COPY [/D] [/V] [/N] [/Y | /-Y] [/Z] [/L] [/A | /B ] source [/A | /B]
+[+ source [/A | /B] [+ …]] [destination [/A | /B]]
+
+source 指定要复制的文件。
+/A 表示一个 ASCII 文本文件。
+/B 表示一个二进位文件。
+/D 允许解密要创建的目标文件
+destination 为新文件指定目录和/或文件名。
+/V 验证新文件写入是否正确。
+/N 复制带有非 8dot3 名称的文件时，
+尽可能使用短文件名。
+/Y 不使用确认是否要覆盖现有目标文件
+的提示。
+/-Y 使用确认是否要覆盖现有目标文件
+的提示。
+/Z 用可重新启动模式复制已联网的文件。
+/L 如果源是符号链接，请将链接复制
+到目标而不是源链接指向的实际文件。
+
+命令行开关 /Y 可以在 COPYCMD 环境变量中预先设定。
+这可能会被命令行上的 /-Y 替代。除非 COPY
+命令是在一个批处理脚本中执行的，默认值应为
+在覆盖时进行提示。
+
+要附加文件，请为目标指定一个文件，为源指定
+数个文件(用通配符或 file1+file2+file3 格式)。
+xcopy命令用法：
+
+E:\Work\Project_Experience\bat_script>xcopy /?
+复制文件和目录树。
+
+XCOPY source [destination] [/A | /M] [/D[:date]] [/P] [/S [/E]] [/V] [/W]
+[/C] [/I] [/Q] [/F] [/L] [/G] [/H] [/R] [/T] [/
+[/K] [/N] [/O] [/X] [/Y] [/-Y] [/Z] [/B]
+[/EXCLUDE:file1[+file2][+file3]…]
+
+source 指定要复制的文件。
+destination 指定新文件的位置和/或名称。
+/A 仅复制有存档属性集的文件，但不更改属性。
+/M 仅复制有存档属性集的文件，并关闭存档属性。
+/D:m-d-y 复制在指定日期或指定日期以后更改的文件。
+如果没有提供日期，只复制那些源时间比目标时间新的文件。
+/EXCLUDE:file1[+file2][+file3]…
+指定含有字符串的文件列表。每个字符串在文件中应位于单独的一行
+如果任何字符串与复制文件的绝对路径的任何部分相符，则排除复制
+该文件。例如，指定如 \obj\ 或 .obj 的字符串会分别排除目录
+obj 下面的所有文件或带有 .obj 扩展名的所有文件。
+/P 创建每个目标文件之前提示您。
+/S 复制目录和子目录，不包括空目录。
+/E 复制目录和子目录，包括空目录。与 /S /E 相同。可以用来修改 /
+/V 验证每个新文件的大小。
+/W 提示您在复制前按键。
+/C 即使有错误，也继续复制。
+/I 如果目标不存在，且要复制多个文件，则假定目标必须是目录。
+/Q 复制时不显示文件名。
+/F 复制时显示完整的源文件名和目标文件名。
+/L 显示要复制的文件。
+/G 允许将加密文件复制到不支持加密的目标。
+/H 也复制隐藏文件和系统文件。
+/R 覆盖只读文件。
+/T 创建目录结构，但不复制文件。不包括空目录或子目录。/T /E 包括
+空目录和子目录。
+/U 只复制已经存在于目标中的文件。
+/K 复制属性。一般的 Xcopy 会重设只读属性。
+/N 用生成的短名称复制。
+/O 复制文件所有权和 ACL 信息。
+/X 复制文件审核设置(隐含 /O)。
+/Y 取消提示以确认要覆盖现有目标文件。
+/-Y 要提示以确认要覆盖现有目标文件。
+/Z 在可重新启动模式下复制网络文件。
+/B 复制符号链接本身与链接目标相对。
+/J 复制时不使用缓冲的 I/O。推荐复制大文件时使用。
+
+开关 /Y 可以预先在 COPYCMD 环境变量中设置。
+这可能被命令行上的 /-Y 覆盖。
+
+【批处理脚本】-1.10-复制文件(夹)命令xcopy,以及与命令c(attrib、del、copy、xcopy),需要的朋友可以参考下
+...和copy命令之间的差异及编程应用_xcopy和copy区别
+在基本语法中,最主要的差异是xcopy命令允许使用额外的选项来控制复制过程,而copy命令则没有这些选项。 复制子目录: copy命令只能复制指定的文件,不能复制整个目录结构。 xcopy命令可以复制指定的文件和整个目录结构。 这意味着如果您想要复...
+复制文件命令xcopy与copy命令的差异编程_copy和xcopy的区别
+在上面的代码中,我们首先设置源文件路径和目标文件路径,然后使用xcopy命令将文件从源文件路径复制到目标文件路径。选项/y用于在复制文件时不进行确认。 二、copy命令 copy命令是Windows
+批处理之copy与xcopy拷贝文件详解
+1. copy命令 1.1. 基本用法 复制，将一个或多个文件从一个位置复制到其他位置。 语法 copy [/d] [/v] [/n] [{/y|/-y}] [/z] [{/a|/b}] Source [{/a|/b}] [+ Source [{/a|/b}] [+ …]][Destination [{/a|/b}]] 参数 /d 允许将复制的加密文件在目标处作为解密文件保存。 /v 验...
+windows系统bat脚本命令总结之复制命令（copy和xcopy）
+
+（copy和xcopy），copy和xcopy是Windows命令行中常用的文件复制命令。它们具有类似的功能，但在某些方面有一些区别。
+批处理之——Part3:复制/移动文件命令copy,xcopy,md rd ren move 命令...
+1-4
+2,Xcopy 与copy区别: Xcopy 支持文件/文件夹新建,比如要将a.txt文件拷贝到『file』文件夹中,若所在路径没有『file』这个文件或者文件夹的情况下执行这两个命令区别如下, 例3.1: copy a.txt \file\ ...
+Win10系统有几种复制文件的命令,哪种最强大?_windows平时的文件复制 是...
+1-6
+xcopy source_file destination_file 1 其中,source_file是要复制的文件的路径,destination_file是要将文件复制到的位置。 使用copy 命令:copy 命令是 Windows 中最基本的文件复制命令,它可以复制文件和目录。要使用 copy 命令复制文件,您...
+07.FormData二进制文件上传
+
+copy和xcopy有何区别
+
+1. COPY不能复制文件夹下的文件，而XCOPY可以。 A:\>XCOPY A:\A\*.* A:\B /S /E 将A文件夹下所有的文件和文件夹都复制到B文件夹下，并保持原有文件结构。 2. XCOPY不能连接文件，而COPY可以连接文件 如：将A盘中的A.TXT和B.TXT文件连接起来，连接后的文件名为C.TXT 解：用COPY命令即可完成此项操作。 A:\>
+【batch】批处理中Copy与Xcopy的区别
+五一限时优惠：付费59.9元，订阅《实用毕业设计专栏》，可赠送该付费专栏中任意代码1份！
+ 2万+
+###Date: 2017/6/20 ###Author: Soaringlee 1):copy不能在有子目录存在的文件中拷贝文件的同时重命名此文件名(注：这里Ｃ：为根目录,bat为子目录),而xcopy能,不过会出现提示,当然你可以加参数而不使它提示  C:\>copy c:\bat\hai.bat d:\bat\hello.bat  提示:系统找不到指定的路径。  已复制  
+Xcopy命令参数
+angou6476的博客
+ 517
+XCOPY是COPY的扩展，可以把指定的目录连文件和目录结构一并拷贝，但不能拷贝系统文件；使用时源盘符、源目标路径名、源文件名至少指定一个；选用/S时对源目录下及其子目录下的所有文件进行COPY。除非指定/E参数，否则/S不会拷贝空目录，若不指定/S参数，则XCOPY只拷贝源目录本身的文件，而不涉及其下的子目录；选用/V参数时，对的拷贝的扇区都进行较验，但速度会降低。 我们不可数典忘...
+XCOPY与COPY
+weixin_33726313的博客
+ 1073
+COPY是DOS内部命令 XCOPY是DOS外部命令，XCOPY stands for extended copy即COPY在任何存在DOS的环境下都可以使用，而XCOPY则需要存在xcopy.exe文件才可运行 copy只针对文件，不针对文件夹 而XCOPY则可以复制目录及目录相关的文件。扩展开来讲其功能类似于diskcopy。 转载于:https://www.cnblogs.com/henr...
+在拷贝文件的时候，显示跟Windows一样的进度条
+04-23
+这是一个类文件，可能拿去直接调用里面有个Copy的方法即可，在类的最上面有这个类的使用方法的详细说明。我个人为了在拷贝文件的时候，能显示Windows进度条费了一番的周折，最后也在朋友给我了这个类。
+批处理入门手册chm修正版
+07-22
+资源名称：批处理入门手册 chm 修正版内容简介： 一 .批处理常用 DOS 命令篇1. 1 echo rem cd dir 命令1. 2 attrib del copy xcopy1. 3 md rd ren move 命令1. 4 find findstr 命令二 .常用网络命令和符号篇2. 1 数个常用的网络命令2. 2 数个常用的特殊符号三 .批处理高级语句篇3. 1 if条件语句3. 2 资源太大，传百度网盘了，链接在附件中，有需要的同学自取。
+批处理学习笔记
+11-18
+自学批处理笔记（3） dir copy 重定向符>>,>,< 自学批处理笔记（4） xcopy attrib 自学批处理笔记（5） del ren move 自学批处理笔记（6） echo pause rem exit 自学批处理笔记（7） set 自学批处理笔记——三种建立...
+bat批处理文件实现复制、删除、创建文件夹、执行程序、打开文件
+12-15
+5、有时候我们想XCOPY 变为自动复制，并且复制完成后关闭电脑，可以建立一个批处理文件，新建文本文档，更名为XCOPY.BAT 当然扩展名原来是TXT 格式的要更名为BAT 在这个 XCOPY.BAT 中输入 xcopy e:\*.* d: /s /h /c...
+bat-基本语法
+热门推荐
+Nemo的笔记本
+ 3万+
+第一章 批处理基础 第一节 常用批处理内部命令简介 批处理定义：顾名思义，批处理文件是将一系列命令按一定的顺序集合为一个可执行的文本文件，其扩展名为BAT或者CMD。这些命令统称批处理命令。 小知识：可以在键盘上按下Ctrl+C组合键来强行终止一个批处理的执行过程。 了解了大概意思后,我们正式开始学习.先看一个简单的例子! @echo off echo “欢迎来到非常BAT!” pause 把上面...
+操作日志表设计
+Nemo的笔记本
+ 2万+
+管理系统的操作日志如何做成通用的模块一直是个让我头疼的问题，不过看了博客园里的某篇文章后，现在基本解决了。 　 　　在开始做之前，必须把两个日志分清楚，那就是普通操作日志和业务操作日志，这两者有何区别？ 　　在我理解，普通操作日志就是单表的操作记录，而业务操作日志则就是一系列的普通操作日志的集合。 　　打个比方，用户需要购买一样宝贝，已经到了下单那步，下单就是个业务，这个业务背后就是一系列的业务，...
+C# byte[] 转换16进制字符串
+Nemo的笔记本
+ 1万+
+1.byte[] 转换16进制字符串   1.1 BitConverter方式 var str = DateTime.Now.ToString(); var encode = Encoding.UTF8; var bytes = encode.GetBytes(str); var hex = BitCon...
+正则表达式包含某字符串且不包含某些字符串
+Nemo的笔记本
+ 1万+
+相对的包含某个单词 (?=abcd) 不包含某个单词，比如hello (?!abcd) 不包含某些字符的正则如下 var $sz = /[#$@/\()<>{}[] ]/gi;//常见的特殊字符不够[]里面继续加 不包含某些字符串的正则如下 ^((?!666|zzz|abc).)*$;//字符串按照要求换 接着需要把上面的多个正则合并到一个 如何合并多个正则 可以用零宽断言来实现。 例如： 合并下列正则表达式： A. 必须包含数字的正则表达式 .\d B. 必须包含英文的正则表达式
+批处理copy
+05-29
+使用 `copy` 命令可以将一个或多个文件从一个位置复制到另一个位置。以下是一些示例： 1. 将一个文件从一个位置复制到另一个位置： ``` copy C:\folder\file.txt D:\backup\ ``` 这将复制 `file.txt` 文件从 `C:\folder` 文件夹到 `D:\backup` 文件夹。 2. 将多个文件从一个位置复制到另一个位置： ``` copy C:\folder\file1.txt C:\folder\file2.txt D:\backup\ ``` 这将复制 `file1.txt` 和 `file2.txt` 文件从 `C:\folder` 文件夹到 `D:\backup` 文件夹。 3. 将整个文件夹从一个位置复制到另一个位置： ``` xcopy C:\folder D:\backup /s /e ``` 这将复制 `C:\folder` 文件夹及其所有子文件夹和文件到 `D:\backup` 文件夹。 请注意，在使用 `copy` 命令之前，请确保您具有足够的权限来复制您想要复制的文件。
+
